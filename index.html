@@ -47,13 +47,20 @@
 
             <!-- Search bar -->
             <div class="col-md-6 col-md-offset-3">
-                <form action="javascript:getSummonerId()" method="get" id="searchForm">
+                <form action="javascript:getSummonerInfo()" method="get" id="searchForm">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="summoner name" name="summonerName" required value="">
                         <span class="input-group-btn">
                             <input class="btn btn-default" type="submit" value="Submit">
                         </span>
+                        <select class="form-control" id="sel1" name="platform">
+                            <option>NA</option>
+                            <option>EU</option>
+                            <option>KR</option>
+                            <option>CN</option>
+                        </select>
                     </div>
+
                 </form>
             </div>
             </div>
@@ -79,36 +86,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
     <!-- Javscript functions -->
-    <script>
-    function getSummonerId() {
-        var summonerId;
-        var apiKey = "?api_key=174ef72a-54df-4458-ae37-fa609507cbda";
-        var riotApiAddress = "https://na.api.pvp.net/";
-        var form = document.getElementById("searchForm");
-        var summonerName = form.elements.summonerName.value;
-        //alert(summonerName);
-        var summonerInfo = "/api/lol/{region}/v1.4/summoner/by-name/{summonerNames}".replace("{region}","na").replace("{summonerNames}",summonerName);
-        var ritoPls = new XMLHttpRequest();
-        ritoPls.open("get", riotApiAddress.concat(summonerInfo).concat(apiKey), false);
-        ritoPls.send();
-        if (ritoPls.status == 200) 
-        {
-            alert(ritoPls.responseText);
-            
-            JSON.parse(ritoPls.responseText, function(k, v)
-                {
-                    console.log(k);
-                    if (k === "id")
-                    {
-                        summonerId = v;
-                    }
-                });
-            //var summonerId = summonerInfoJSON.eval(summonerName).id;
-            console.log(summonerId);
-        }
-        
-    }
-    </script>
+    <script src="js/helper.js"></script>
 
 </body>
 
