@@ -31,23 +31,30 @@ var championData = (function () {
 
 function championInfo()
 {
+    this.championImage;
     this.championName;
     this.championLevel;
     this.championPoints;
     this.pointsUntilNextLevel;
     this.pointsSinceLastLevel;
+    this.championIcon;
 }
 
 function createMasteryTable(championMasteryList)
 {
-    var myTable= "<table class='table' style='border: 1px white;'><tr><th style='width: 100px;text-align: center; background-color:#000000;'>Champion</th>";
-    myTable+= "<th style='width: 100px; text-align: right; background-color:#000000;'>Mastery Level</th>";
-    myTable+="<th style='width: 100px; red; text-align: right; background-color:#000000;'>Mastery Points</th></tr>";
+    var myTable= "<table class='table' style='border: 1px white;'><tr>"
+    myTable += "<th style='width: 100px; text-align: center; background-color:#000000;\'></th>";
+    myTable += "<th style='width: 100px; text-align: center; background-color:#000000;'>Champion</th>";
+    myTable += "<th style='width: 100px; text-align: right; background-color:#000000;'>Mastery Level</th>";
+    myTable += "<th style='width: 100px; red; text-align: right; background-color:#000000;'>Mastery Points</th>";
+    myTable += "<th style='width: 100px; red; text-align: right; background-color:#000000;'>Points until next level</th></tr>";
 
   for (var i=0; i<10; i++) {
-    myTable+="<tr><td style='width: 100px; background-color:#000033;'>" + championMasteryList[i].championName + "</td>";
+    myTable+="<tr><td style='width: 100px;text-align:center; background-color:#000033;\'><img src=\"" + championMasteryList[i].championIcon + '" width="40" height="40"></td>'
+    myTable+="<td style='width: 100px; text-align:center; background-color:#000033;'>"  + championMasteryList[i].championName + "</td>";
     myTable+="<td style='width: 100px; background-color:#000033; text-align: right;'>" + championMasteryList[i].championLevel + "</td>";
-    myTable+="<td style='width: 100px; background-color:#000033; text-align: right;'>" + championMasteryList[i].championPoints + "</td></tr>";
+    myTable+="<td style='width: 100px; background-color:#000033; text-align: right;'>" + championMasteryList[i].championPoints + "</td>";
+    myTable+="<td style='width: 100px; background-color:#000033; text-align: right;'>" + championMasteryList[i].pointsUntilNextLevel + "</td></tr>";
   }  
    myTable+="</table><bg-helper></bg-helper>";
    return myTable;
@@ -73,6 +80,7 @@ function getSummonerInfo(summonerName, region)
     var championMasteryList = getChampionMastery(summonerId,region);
     console.log(championMasteryList);
     document.getElementById("champion-data").innerHTML = createMasteryTable(championMasteryList);
+    console.log(getLatestVersion(region));
 
 }
 
@@ -91,10 +99,10 @@ function getChampionMastery(summonerId, region)
     var platformId = region.concat('1'); //TODO: make function maybe to convert region to platform id
     var requestString = riotApiAddress.concat('/championmastery/location/{platformId}/player/{playerId}/champions'.replace("{platformId}",platformId).replace('{playerId}',summonerId).concat(apiKey));
     var ritoPls = riotApiRequest(requestString);
+    var version = getLatestVersion(region);
     if (ritoPls.status == 200) 
     {
         var response = JSON.parse(ritoPls.responseText);
-        //this might take too long. TODO: Consider different approach
 
         for (var i = 0; i < response.length; i++) {
             var obj = response[i];
@@ -104,6 +112,7 @@ function getChampionMastery(summonerId, region)
             currentChampionInfo.championPoints = obj.championPoints;
             currentChampionInfo.pointsUntilNextLevel = obj.championPointsUntilNextLevel;
             currentChampionInfo.pointsSinceLastLevel = obj.championPointsSinceLastLevel;
+            currentChampionInfo.championIcon = getChampionImageSource(getChampionKey(obj.championId),version); //This can take long
             championMasteryList.push(currentChampionInfo);
         }
         return championMasteryList;
@@ -128,6 +137,12 @@ function getChampionName(championId, region)
     }
 }
 
+function getChampionKey(championId)
+{
+    //TODO: write section to get it from online
+    return championData.data[championId].key;           
+}
+
 function getSummonerId(summonerName, region) 
 {
     var summonerInfo = "/api/lol/{region}/v1.4/summoner/by-name/{summonerNames}".replace("{region}",region).replace("{summonerNames}",summonerName);
@@ -142,6 +157,23 @@ function getSummonerId(summonerName, region)
                 }
             });
         return summonerId;
+    }
+}
+
+//http://ddragon.leagueoflegends.com/cdn/6.9.1/img/champion/Aatrox.png 
+function getChampionImageSource(championKey,version)
+{
+    return requestString = "http://ddragon.leagueoflegends.com/cdn/" + version + "/img/champion/" + championKey +".png";
+}
+
+function getLatestVersion(region)
+{
+    var requestString = "/api/lol/static-data/{region}/v1.2/versions".replace("{region}",region.toLowerCase());
+    var ritoPls = riotApiRequest(riotApiAddressGlobal + requestString + apiKey);
+    if (ritoPls.status == 200)
+    {
+        versions = JSON.parse(ritoPls.responseText);
+        return versions[0];
     }
 }
 
