@@ -43,18 +43,20 @@ function championInfo()
 function createMasteryTable(championMasteryList)
 {
     var myTable= "<table class='table' style='border: 1px white;'><tr>"
-    myTable += "<th style='width: 100px; text-align: center; background-color:#000000;\'></th>";
+    myTable += "<th style='text-align: center; background-color:#000000;\'></th>";
     myTable += "<th style='width: 100px; text-align: center; background-color:#000000;'>Champion</th>";
-    myTable += "<th style='width: 100px; text-align: right; background-color:#000000;'>Mastery Level</th>";
-    myTable += "<th style='width: 100px; red; text-align: right; background-color:#000000;'>Mastery Points</th>";
-    myTable += "<th style='width: 100px; red; text-align: right; background-color:#000000;'>Points until next level</th></tr>";
+    myTable += "<th style='width: 100px; text-align: center; background-color:#000000;'>Mastery Level</th>";
+    myTable += "<th style='width: 100px; red; text-align: center; background-color:#000000;'>Mastery Points</th>";
+    myTable += "<th style='width: 100px; red; text-align: center; background-color:#000000;'>Points for level</th>";
+    myTable += "<th style='width: 100px; red; text-align: center; background-color:#000000;'>Games needed</th></tr>"
 
   for (var i=0; i<10; i++) {
     myTable+="<tr><td style='width: 100px;text-align:center; background-color:#000033;\'><img src=\"" + championMasteryList[i].championIcon + '" width="40" height="40"></td>'
     myTable+="<td style='width: 100px; text-align:center; background-color:#000033;'>"  + championMasteryList[i].championName + "</td>";
-    myTable+="<td style='width: 100px; background-color:#000033; text-align: right;'>" + championMasteryList[i].championLevel + "</td>";
-    myTable+="<td style='width: 100px; background-color:#000033; text-align: right;'>" + championMasteryList[i].championPoints + "</td>";
-    myTable+="<td style='width: 100px; background-color:#000033; text-align: right;'>" + championMasteryList[i].pointsUntilNextLevel + "</td></tr>";
+    myTable+="<td style='width: 100px; background-color:#000033; text-align: center;'>" + championMasteryList[i].championLevel + "</td>";
+    myTable+="<td style='width: 100px; background-color:#000033; text-align: center;'>" + championMasteryList[i].championPoints + "</td>";
+    myTable+="<td style='width: 100px; background-color:#000033; text-align: center;'>" + championMasteryList[i].pointsUntilNextLevel + "</td>";
+    myTable+="<td style='width: 100px; background-color:#000033; text-align: center;'>" + "temp" + "</td></tr>";
   }  
    myTable+="</table><bg-helper></bg-helper>";
    return myTable;
@@ -160,7 +162,6 @@ function getSummonerId(summonerName, region)
     }
 }
 
-//http://ddragon.leagueoflegends.com/cdn/6.9.1/img/champion/Aatrox.png 
 function getChampionImageSource(championKey,version)
 {
     return requestString = "http://ddragon.leagueoflegends.com/cdn/" + version + "/img/champion/" + championKey +".png";
