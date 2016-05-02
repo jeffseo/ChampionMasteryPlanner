@@ -16,7 +16,13 @@
 
     <!-- Custom styles for the cover template -->
     <link href="css/cover.css" rel="stylesheet">
+    <!-- javascript src -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
 
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <!-- Javscript functions -->
+    <script src="js/helper.js"></script>
 </head>
 
 <body>
@@ -43,29 +49,38 @@
           <div class="inner cover">
           <div class="font-enhancement">
             <h1 class="cover-heading">Champion Mastery Planner</h1>
-            <p class="lead">Enter your summoner name for champion mastery info</p>
+            <div class="row" id="search summoner">
+            <p class="lead" id="cover-info">Enter your summoner name for champion mastery info</p>
 
             <!-- Search bar -->
             <div class="col-md-6 col-md-offset-3">
-                <form action="javascript:getSummonerInfo()" method="get" id="searchForm">
+                <form action="index.html" method="get" id="searchForm">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="summoner name" name="summonerName" required value="">
                         <span class="input-group-btn">
                             <input class="btn btn-default" type="submit" value="Submit">
                         </span>
-                        <select class="form-control" id="sel1" name="platform">
+                        <select class="form-control" id="sel1" name="region">
                             <option>NA</option>
-                            <option>EU</option>
                             <option>KR</option>
                             <option>CN</option>
+                            <option>EUW</option>
                         </select>
                     </div>
 
                 </form>
             </div>
+            <div class="col-md-3"><p></p></div>
             </div>
-          </div>
-
+        <div class="row" id="champion info" style="display:none">
+            <h2 class="cover-heading">Top 10 Champion Mastery</h2>            
+                <div class="col-md-12" id="champion-data">
+                    <script>getSummonerInfo()</script>
+                    <!-- summoner's champion mastery info -->
+                </div>
+        </div>
+            </div>
+        </div>
           <div class="mastfoot">
             <div class="inner">
               <p>Submission for Riot API Contest, by <b>Albert & Seo </b></p>
@@ -77,16 +92,6 @@
       </div>
 
     </div>
-
-
-    <!-- javascript src -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-
-    <!-- Javscript functions -->
-    <script src="js/helper.js"></script>
 
 </body>
 

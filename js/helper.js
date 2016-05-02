@@ -1,12 +1,78 @@
+/*
+To reach 
+Tier    CP Required     Cumulative CP Required  Cumulative CP %
+1       0               0                       0
+2       1800            1800                    8
+3       4200            6000                    28
+4       6600            12600                   58
+5       9000            21600                   100
+6       11400           33000                   -
+7       13800           46800                   -
+*/
+
 var apiKey = "?api_key=174ef72a-54df-4458-ae37-fa609507cbda";
 var riotApiAddress = "https://na.api.pvp.net/";
-function getSummonerInfo() 
+var riotApiAddressGlobal = "https://global.api.pvp.net/";
+
+//http://stackoverflow.com/questions/2177548/load-json-into-variable
+var championData = (function () {
+    var json = null;
+    $.ajax({
+        'async': false,
+        'global': false,
+        'url': 'static-champion-data.json',
+        'dataType': "json",
+        'success': function (data) {
+            json = data;
+        }
+    });
+    return json;
+})(); 
+
+function championInfo()
+{
+    this.championName;
+    this.championLevel;
+    this.championPoints;
+    this.pointsUntilNextLevel;
+    this.pointsSinceLastLevel;
+}
+
+function createMasteryTable(championMasteryList)
+{
+    var myTable= "<table class='table' style='border: 1px white;'><tr><th style='width: 100px;text-align: center; background-color:#000000;'>Champion</th>";
+    myTable+= "<th style='width: 100px; text-align: right; background-color:#000000;'>Mastery Level</th>";
+    myTable+="<th style='width: 100px; red; text-align: right; background-color:#000000;'>Mastery Points</th></tr>";
+
+  for (var i=0; i<10; i++) {
+    myTable+="<tr><td style='width: 100px; background-color:#000033;'>" + championMasteryList[i].championName + "</td>";
+    myTable+="<td style='width: 100px; background-color:#000033; text-align: right;'>" + championMasteryList[i].championLevel + "</td>";
+    myTable+="<td style='width: 100px; background-color:#000033; text-align: right;'>" + championMasteryList[i].championPoints + "</td></tr>";
+  }  
+   myTable+="</table><bg-helper></bg-helper>";
+   return myTable;
+}
+
+function getSummonerInfo(summonerName, region) 
 {   
-    var form = document.getElementById("searchForm");
-    var summonerName = form.elements.summonerName.value;
-    var platformId = form.elements.platform.value;
-    var summonerId = getSummonerId(summonerName,platformId);
-    var championMasteryInfo = getChampionMastery(summonerId,platformId);
+    if (!summonerName && !region)
+    {
+        // var form = document.getElementById("searchForm");
+        // var summonerName = form.elements.summonerName.value;
+        // var region = form.elements.platform.value;   
+        var summonerName = getParameterByName('summonerName');
+        var region = getParameterByName('region');
+    }
+    console.log(summonerName, region);
+    if (summonerName === null || region === null)
+    {
+        return;
+    }
+    removeForm();
+    var summonerId = getSummonerId(summonerName,region);
+    var championMasteryList = getChampionMastery(summonerId,region);
+    console.log(championMasteryList);
+    document.getElementById("champion-data").innerHTML = createMasteryTable(championMasteryList);
 
 }
 
@@ -19,45 +85,62 @@ function getSummonerInfo()
     // "championPointsUntilNextLevel": 0,
     // "chestGranted": false,
     // "highestGrade": "S-"
-function getChampionMastery(summonerId, platformId)
+function getChampionMastery(summonerId, region)
 {
-    platformId = platformId.concat('1'); //TODO: make function maybe to convert region to platform id
-    console.log(platformId);
-    var requestString = riotApiAddress.concat('/championmastery/location/{platformId}/player/{playerId}/topchampions'.replace("{platformId}",platformId).replace('{playerId}',summonerId).concat(apiKey));
+    var championMasteryList = [];
+    var platformId = region.concat('1'); //TODO: make function maybe to convert region to platform id
+    var requestString = riotApiAddress.concat('/championmastery/location/{platformId}/player/{playerId}/champions'.replace("{platformId}",platformId).replace('{playerId}',summonerId).concat(apiKey));
     var ritoPls = riotApiRequest(requestString);
     if (ritoPls.status == 200) 
     {
         var response = JSON.parse(ritoPls.responseText);
-        console.log(response);
+        //this might take too long. TODO: Consider different approach
+
         for (var i = 0; i < response.length; i++) {
             var obj = response[i];
-            console.log(obj.championId);
-            console.log(obj.championLevel);
-            console.log(obj.championPointsUntilNextLevel);
+            var currentChampionInfo = new championInfo();  
+            currentChampionInfo.championName = getChampionName(obj.championId);
+            currentChampionInfo.championLevel = obj.championLevel;
+            currentChampionInfo.championPoints = obj.championPoints;
+            currentChampionInfo.pointsUntilNextLevel = obj.championPointsUntilNextLevel;
+            currentChampionInfo.pointsSinceLastLevel = obj.championPointsSinceLastLevel;
+            championMasteryList.push(currentChampionInfo);
         }
-        //var summonerId = summonerInfoJSON.eval(summonerName).id;
+        return championMasteryList;
     }       
+}
+
+function getChampionName(championId, region)
+{
+    if (region)
+    {
+        var requestString = riotApiAddressGlobal.concat('/api/lol/static-data/{region}/v1.2/champion/{id}'.replace('{region}',region.toLowerCase()).replace('{id}',championId).concat(apiKey));
+        var ritoPls = riotApiRequest(requestString);
+        if (ritoPls.status = 200)
+        {
+            var championInfo = JSON.parse(ritoPls.responseText);
+            return championInfo.name;
+        }       
+    }
+    else
+    {
+        return championData.data[championId].name;           
+    }
 }
 
 function getSummonerId(summonerName, region) 
 {
     var summonerInfo = "/api/lol/{region}/v1.4/summoner/by-name/{summonerNames}".replace("{region}",region).replace("{summonerNames}",summonerName);
     var ritoPls = riotApiRequest(riotApiAddress.concat(summonerInfo).concat(apiKey));
-    //ritoPls.open("get", riotApiAddress.concat(summonerInfo).concat(apiKey), false);
-    //ritoPls.send();
     if (ritoPls.status == 200) 
-    {
-        //alert(ritoPls.responseText);    
+    {  
         JSON.parse(ritoPls.responseText, function(k, v)
             {
-                //console.log(k);
                 if (k === "id")
                 {
                     summonerId = v;
                 }
             });
-        //var summonerId = summonerInfoJSON.eval(summonerName).id;
-        //console.log(summonerId);
         return summonerId;
     }
 }
@@ -69,3 +152,28 @@ function riotApiRequest(requestString)
     request.send();
     return request;
 }
+
+//http://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+function removeForm()
+{
+    var theFormItself = 
+        document.getElementById('search summoner');
+    theFormItself.style.display = 'none';
+    document.getElementById('cover-info').style.display = 'none';
+    document.getElementById('champion info').style.display = 'block';
+    // var theSuccessMessage = 
+    //     document.getElementById('successMessage');  
+    // theSuccessMessage.style.display = 'block';          
+}
+
+

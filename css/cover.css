@@ -42,6 +42,17 @@ body {
   text-shadow: 0 1px 3px rgba(0,0,0,.5);
 }
 
+.bg-helper {
+    position:absolute;
+    /*top:250px;*/
+    /*left:140px;*/
+    width:500px;
+    height:50px;
+    background-color:black;
+    z-index:0;
+    opacity:0.5;
+}
+
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {
   display: table;
