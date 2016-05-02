@@ -40,6 +40,18 @@ function championInfo()
     this.championIcon;
 }
 
+function createTop10Page()
+{
+    championMasteryList = getSummonerInfo();
+    if (championMasteryList === undefined)
+    {
+        return;
+    }
+    removeForm();
+    //console.log(championMasteryList);
+    document.getElementById("champion-data").innerHTML = createMasteryTable(championMasteryList);
+}
+
 function createMasteryTable(championMasteryList)
 {
     var myTable= "<table class='table' style='border: 1px white;'><tr>"
@@ -77,12 +89,9 @@ function getSummonerInfo(summonerName, region)
     {
         return;
     }
-    removeForm();
     var summonerId = getSummonerId(summonerName,region);
-    var championMasteryList = getChampionMastery(summonerId,region);
-    console.log(championMasteryList);
-    document.getElementById("champion-data").innerHTML = createMasteryTable(championMasteryList);
-    console.log(getLatestVersion(region));
+    var championMasteryList = getChampionMasteryList(summonerId,region);
+    return championMasteryList;
 
 }
 
@@ -95,7 +104,7 @@ function getSummonerInfo(summonerName, region)
     // "championPointsUntilNextLevel": 0,
     // "chestGranted": false,
     // "highestGrade": "S-"
-function getChampionMastery(summonerId, region)
+function getChampionMasteryList(summonerId, region)
 {
     var championMasteryList = [];
     var platformId = region.concat('1'); //TODO: make function maybe to convert region to platform id
@@ -114,11 +123,23 @@ function getChampionMastery(summonerId, region)
             currentChampionInfo.championPoints = obj.championPoints;
             currentChampionInfo.pointsUntilNextLevel = obj.championPointsUntilNextLevel;
             currentChampionInfo.pointsSinceLastLevel = obj.championPointsSinceLastLevel;
-            currentChampionInfo.championIcon = getChampionImageSource(getChampionKey(obj.championId),version); //This can take long
+            currentChampionInfo.championIcon = getChampionImageSource(getChampionKey(obj.championId),version); //This can take long?
             championMasteryList.push(currentChampionInfo);
         }
         return championMasteryList;
     }       
+}
+
+function getChampionMastery(region, playerId, championId)
+{
+    var platformId = region.concat('1'); //some platformId doesn't attach 1, make function to convert region to platformid
+    ///championmastery/location/{platformId}/player/{playerId}/champion/{championId}
+    var requestString = riotApiAddress.concat('/championmastery/location/{platformId}/player/{playerId}/champion/{championId}'.replace("{platformId}",platformId).replace("{playerId}",playerId).replace("{championId}",championId).concat(apiKey));
+    var ritoPls = riotApiRequest(requestString);
+    if (ritoPls.status == 200)
+    {
+        return JSON.parse(ritoPls.responseText);
+    }
 }
 
 function getChampionName(championId, region)
@@ -199,14 +220,71 @@ function getParameterByName(name, url) {
 
 function removeForm()
 {
-    var theFormItself = 
-        document.getElementById('search summoner');
+    var theFormItself = document.getElementById('search summoner');
     theFormItself.style.display = 'none';
-    document.getElementById('cover-info').style.display = 'none';
+    //document.getElementById('cover-info').style.display = 'none';
     document.getElementById('champion info').style.display = 'block';
     // var theSuccessMessage = 
     //     document.getElementById('successMessage');  
     // theSuccessMessage.style.display = 'block';          
+}
+
+function createSingleChampionPage()
+{
+    document.getElementById('top10 row').style.display = 'none';
+    document.getElementById('single-champion').style.display = 'block';
+    var summonerName = getParameterByName('summonerName');
+    var region = getParameterByName('region');
+
+    var championName = document.getElementById("champion-form").elements.championName.value;
+    if (isChampionValid(championName))
+    {
+        var championId = getChampionId(championName);
+        if (championId === undefined)
+        {
+            return;
+        }
+        else
+        {
+            var championMastery = getChampionMastery(region,getSummonerId(summonerName,region),championId);
+            console.log(championMastery);
+        }
+    }
+    else
+    {
+        alert("invalid Champion Name");
+    }
+  
+}
+
+function getChampionId(championName)
+{
+    var championName = championName.toLowerCase();
+    championList = championData.data;
+    for (var key in championList) {
+      if (championList.hasOwnProperty(key)) {
+        if (championName == championList[key].name.toLowerCase())
+        {
+            return championList[key].id;
+        }
+      }
+    } 
+}
+
+// http://stackoverflow.com/questions/684672/loop-through-javascript-object
+function isChampionValid(championName)
+{
+    var championName = championName.toLowerCase();
+    championList = championData.data;
+    for (var key in championList) {
+      if (championList.hasOwnProperty(key)) {
+        if (championName == championList[key].name.toLowerCase())
+        {
+            return true;
+        }
+      }
+    }
+    return false;
 }
 
 

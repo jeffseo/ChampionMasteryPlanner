@@ -50,36 +50,53 @@
           <div class="font-enhancement">
             <h1 class="cover-heading">Champion Mastery Planner</h1>
             <div class="row" id="search summoner">
-            <p class="lead" id="cover-info">Enter your summoner name for champion mastery info</p>
+                <p class="lead" id="cover-info">Enter your summoner name for champion mastery info</p>
 
-            <!-- Search bar -->
-            <div class="col-md-6 col-md-offset-3">
-                <form action="index.html" method="get" id="searchForm">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="summoner name" name="summonerName" required value="">
-                        <span class="input-group-btn">
-                            <input class="btn btn-default" type="submit" value="Submit">
-                        </span>
-                        <select class="form-control" id="sel1" name="region">
-                            <option>NA</option>
-                            <option>KR</option>
-                            <option>CN</option>
-                            <option>EUW</option>
-                        </select>
-                    </div>
+                <!-- Search bar -->
+                <div class="col-md-6 col-md-offset-3">
+                    <form action="index.html" method="get" id="searchForm">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="summoner name" name="summonerName" required value="">
+                            <span class="input-group-btn">
+                                <input class="btn btn-default" type="submit" value="Submit">
+                            </span>
+                            <select class="form-control" id="sel1" name="region">
+                                <option>NA</option>
+                                <option>KR</option>
+                                <option>CN</option>
+                                <option>EUW</option>
+                            </select>
+                        </div>
 
-                </form>
-            </div>
-            <div class="col-md-3"><p></p></div>
-            </div>
-        <div class="row" id="champion info" style="display:none">
-            <h2 class="cover-heading">Top 10 Champion Mastery</h2>            
-                <div class="col-md-12" id="champion-data">
-                    <script>getSummonerInfo()</script>
-                    <!-- summoner's champion mastery info -->
+                    </form>
                 </div>
-        </div>
             </div>
+            <div class="row" id="champion info" style="display:none">
+                <div class="row">
+                    <p class="lead" id="cover-info">Enter champion name</p>
+                    <div class="col-md-6 col-md-offset-3">
+                        <form action="javascript:createSingleChampionPage()" method="get" id="champion-form">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="champion name" name="championName" required value="">
+                                <span class="input-group-btn">
+                                    <input class="btn btn-default" type="submit" value="Submit">
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row" id="top10 row">
+                <h2 class="cover-heading">Top 10 Champion Mastery</h2>            
+                    <div class="col-md-12" id="champion-data">
+                        <script>createTop10Page()</script>
+                        <!-- summoner's champion mastery info -->
+                    </div>
+                </div>
+                <div class="row" id="single-champion" style="display:none">
+
+                </div>
+            </div>
+        </div>
         </div>
           <div class="mastfoot">
             <div class="inner">
