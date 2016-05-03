@@ -20,7 +20,7 @@ var championData = (function () {
     $.ajax({
         'async': false,
         'global': false,
-        'url': 'static-champion-data.json',
+        'url': 'https://raw.githubusercontent.com/jfseo/ChampionMasteryPlanner/master/static-champion-data.json?token=AJ8exL4MVcboB9EUaWCr9yOPUjNIXaj6ks5XMYaGwA%3D%3D',
         'dataType': "json",
         'success': function (data) {
             json = data;
@@ -31,13 +31,13 @@ var championData = (function () {
 
 function championInfo()
 {
-    this.championImage;
-    this.championName;
-    this.championLevel;
-    this.championPoints;
-    this.pointsUntilNextLevel;
-    this.pointsSinceLastLevel;
-    this.championIcon;
+    this.championImage = undefined;
+    this.championName = undefined;
+    this.championLevel = undefined;
+    this.championPoints = undefined;
+    this.pointsUntilNextLevel = undefined;
+    this.pointsSinceLastLevel = undefined;
+    this.championIcon = undefined;
 }
 
 function createTop10Page()
@@ -54,16 +54,16 @@ function createTop10Page()
 
 function createMasteryTable(championMasteryList)
 {
-    var myTable= "<table class='table' style='border: 1px white;'><tr>"
+    var myTable= "<table class='table' style='border: 1px white;'><tr>";
     myTable += "<th style='text-align: center; background-color:#000000;\'></th>";
     myTable += "<th style='width: 100px; text-align: center; background-color:#000000;'>Champion</th>";
     myTable += "<th style='width: 100px; text-align: center; background-color:#000000;'>Mastery Level</th>";
     myTable += "<th style='width: 100px; red; text-align: center; background-color:#000000;'>Mastery Points</th>";
     myTable += "<th style='width: 100px; red; text-align: center; background-color:#000000;'>Points for level</th>";
-    myTable += "<th style='width: 100px; red; text-align: center; background-color:#000000;'>Games needed</th></tr>"
+    myTable += "<th style='width: 100px; red; text-align: center; background-color:#000000;'>Games needed</th></tr>";
 
   for (var i=0; i<10; i++) {
-    myTable+="<tr><td style='width: 100px;text-align:center; background-color:#000033;\'><img src=\"" + championMasteryList[i].championIcon + '" width="40" height="40"></td>'
+    myTable+="<tr><td style='width: 100px;text-align:center; background-color:#000033;\'><img src=\"" + championMasteryList[i].championIcon + '" width="40" height="40"></td>';
     myTable+="<td style='width: 100px; text-align:center; background-color:#000033;'>"  + championMasteryList[i].championName + "</td>";
     myTable+="<td style='width: 100px; background-color:#000033; text-align: center;'>" + championMasteryList[i].championLevel + "</td>";
     myTable+="<td style='width: 100px; background-color:#000033; text-align: center;'>" + championMasteryList[i].championPoints + "</td>";
@@ -81,8 +81,8 @@ function getSummonerInfo(summonerName, region)
         // var form = document.getElementById("searchForm");
         // var summonerName = form.elements.summonerName.value;
         // var region = form.elements.platform.value;   
-        var summonerName = getParameterByName('summonerName');
-        var region = getParameterByName('region');
+        summonerName = getParameterByName('summonerName');
+        region = getParameterByName('region');
     }
     console.log(summonerName, region);
     if (summonerName === null || region === null)
@@ -148,7 +148,7 @@ function getChampionName(championId, region)
     {
         var requestString = riotApiAddressGlobal.concat('/api/lol/static-data/{region}/v1.2/champion/{id}'.replace('{region}',region.toLowerCase()).replace('{id}',championId).concat(apiKey));
         var ritoPls = riotApiRequest(requestString);
-        if (ritoPls.status = 200)
+        if (ritoPls.status == 200)
         {
             var championInfo = JSON.parse(ritoPls.responseText);
             return championInfo.name;
@@ -185,7 +185,7 @@ function getSummonerId(summonerName, region)
 
 function getChampionImageSource(championKey,version)
 {
-    return requestString = "http://ddragon.leagueoflegends.com/cdn/" + version + "/img/champion/" + championKey +".png";
+    return "http://ddragon.leagueoflegends.com/cdn/" + version + "/img/champion/" + championKey +".png";
 }
 
 function getLatestVersion(region)
@@ -259,7 +259,7 @@ function createSingleChampionPage()
 
 function getChampionId(championName)
 {
-    var championName = championName.toLowerCase();
+    championName = championName.toLowerCase();
     championList = championData.data;
     for (var key in championList) {
       if (championList.hasOwnProperty(key)) {
@@ -274,7 +274,7 @@ function getChampionId(championName)
 // http://stackoverflow.com/questions/684672/loop-through-javascript-object
 function isChampionValid(championName)
 {
-    var championName = championName.toLowerCase();
+    championName = championName.toLowerCase();
     championList = championData.data;
     for (var key in championList) {
       if (championList.hasOwnProperty(key)) {
