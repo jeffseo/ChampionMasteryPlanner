@@ -1,0 +1,32 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+<h1 class="cover-heading">Champion Mastery Planner</h1>
+<div class="row" id="search summoner">
+    <p class="lead" id="cover-info">Enter your summoner name for champion mastery info</p>
+
+    <!-- Search bar -->
+    <div class="col-md-6 col-md-offset-3">
+        <form action="summoner" method="get" id="searchForm">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="summoner name" name="summonerName" required value="">
+                <span class="input-group-btn">
+                    <input class="btn btn-default" type="submit" value="Submit">
+                </span>
+                <select class="form-control" id="sel1" name="region">
+                    <option>NA</option>
+                    <option>KR</option>
+                    <option>EUW</option>
+                    <option>EUNE</option>
+                    <option>JP</option>
+                    <option>LAN</option>
+                    <option>LAS</option>
+                    <option>OCE</option>
+                    <option>TR</option>
+                    <option>RU</option>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

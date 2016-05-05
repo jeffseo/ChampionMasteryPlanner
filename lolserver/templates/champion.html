@@ -1,0 +1,45 @@
+{% extends "templates/base.html" %}
+
+{% block content %}
+<h1 class="cover-heading">Summoner: {{ summonerName }}</h1>
+<div class="row" id="champion info" >
+    <div class="row">
+        <p class="lead" id="cover-info">Enter champion name</p>
+        <div class="col-md-6 col-md-offset-3">
+            <form action="" method="get" id="champion-form">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="champion name" name="championName" required value="">
+                    <input type="hidden" name="summonerName" value={{summonerName}} />
+                    <input type="hidden" name="region" value={{region}} />
+                    <span class="input-group-btn">
+                        <input class="btn btn-default" type="submit" value="Submit">
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row" id="champion row">
+    <h2 class="cover-heading">Champion Mastery: {{ championName }}</h2>            
+        <div class="col-md-12" id="champion-data">
+            <!-- todo: clean up to a css -->
+            <table class='table' style='border: 1px white;'>
+                <tr>
+                    <th style='text-align: center; background-color:#000000;\'></th>
+                    <th style='width: 100px; text-align: center; background-color:#000000;'>Champion</th>
+                    <th style='width: 100px; text-align: center; background-color:#000000;'>Mastery Level</th>
+                    <th style='width: 100px; red; text-align: center; background-color:#000000;'>Mastery Points</th>
+                    <th style='width: 100px; red; text-align: center; background-color:#000000;'>Points for level</th>
+                    <th style='width: 100px; red; text-align: center; background-color:#000000;'>Games needed</th>
+                </tr>
+                <tr>
+                <td style='width: 100px;text-align:center; background-color:#000033;'><img src="{{ champion.championIcon }}" width="40" height="40"></td>
+                <td style='width: 100px; text-align:center; background-color:#000033;'>{{ champion.championName }}</td>
+                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.championLevel }}</td>
+                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.championPoints }}</td>
+                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.pointsUntilNextLevel }}</td>
+                <td style='width: 100px; background-color:#000033; text-align: center;'>temp</td></tr>
+            </table><bg-helper></bg-helper>
+        </div>
+    </div>
+</div>
+{% endblock %}
