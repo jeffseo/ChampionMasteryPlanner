@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import RiotConstants
 from RiotAPI import RiotAPI
+import masteryPointFormula
 # Create your views here.
 
 def index(request):
@@ -44,6 +45,6 @@ def champion(request):
         context['summonerName'] = summonerName
         context['region'] = region
         context['champion'] = api.getChampionMastery(summonerId, api.getChampionId(championName))
-
+        context['gamesNeeded'] = masteryPointFormula.pointsRequired(api.getChampionMastery(summonerId, api.getChampionId(championName)).championPoints, 21600, 0.5)
         return render(request,'templates/champion.html', context)    
 

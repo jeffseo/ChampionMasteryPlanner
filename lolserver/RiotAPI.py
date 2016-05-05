@@ -1,6 +1,8 @@
 import requests
 import json
 import RiotConstants as Consts
+import imp
+masteryPointFormula = imp.load_source("masteryPointFormula", "lolserver/api/masteryPointFormula.py")
 
 class ChampionInfo(object):
     def __init__(self):
@@ -10,6 +12,7 @@ class ChampionInfo(object):
         self.pointsUntilNextLevel = None;
         self.pointsSinceLastLevel = None;
         self.championIcon = None;
+        self.gamesNeeded = None;
 
     def setUnplayedInfo(self, championName):
         self.championName = championName
@@ -17,6 +20,7 @@ class ChampionInfo(object):
         self.championPoints = 0
         self.pointsUntilNextLevel = 1800
         self.championIcon = None
+        self.gamesNeeded = 30
 
 
 class RiotAPI(object):
@@ -64,6 +68,9 @@ class RiotAPI(object):
             currentChampionInfo.pointsUntilNextLevel = champion['championPointsUntilNextLevel'];
             currentChampionInfo.pointsSinceLastLevel = champion['championPointsSinceLastLevel'];
             currentChampionInfo.championIcon = self.getChampionImageSource(self.getChampionKey(champion['championId']))
+            # Assuming 50% win rate.
+            currentChampionInfo.gamesNeeded = masteryPointFormula.pointsRequired(float(champion['championPoints']), 21600, 0.5)
+
             championMasteryList.append(currentChampionInfo)
         return championMasteryList
 
@@ -94,6 +101,7 @@ class RiotAPI(object):
         champion.pointsUntilNextLevel = championJson['championPointsUntilNextLevel'];
         champion.pointsSinceLastLevel = championJson['championPointsSinceLastLevel'];
         champion.championIcon = self.getChampionImageSource(self.getChampionKey(championJson['championId']))
+        champion.gamesNeeded = masteryPointFormula.pointsRequired(float(champion.championPoints), 21600, 0.5)
         return champion
 
     #local for now
