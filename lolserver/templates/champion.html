@@ -8,7 +8,22 @@
         <div class="col-md-6 col-md-offset-3">
             <form action="" method="get" id="champion-form">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="champion name" name="championName" required value="">
+                    <!--<input type="text" class="form-control" placeholder="champion name" name="championName" required value=""> -->
+					   <script type="text/javascript">
+							$(document).ready(function() {
+								$(".js-example-basic-single").select2({ 
+								placeholder: "Select Champion", 
+								allowClear: true,
+								width: '100%' 
+								});
+							});
+						</script>
+
+						<select class="js-example-basic-single">
+							
+							<option value="Katarina" name="championName">Katarina</option>
+							<option value="Udyr" name="championName">Udyr</option>
+						</select>
                     <input type="hidden" name="summonerName" value={{summonerName}} />
                     <input type="hidden" name="region" value={{region}} />
                     <span class="input-group-btn">
@@ -37,7 +52,7 @@
                 <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.championLevel }}</td>
                 <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.championPoints }}</td>
                 <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.pointsUntilNextLevel }}</td>
-                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ gamesNeeded}}</td></tr>
+                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ gamesNeeded }}</td></tr>
             </table><bg-helper></bg-helper>
         </div>
     </div>
