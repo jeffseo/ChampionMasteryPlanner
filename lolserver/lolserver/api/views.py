@@ -12,7 +12,7 @@ def index(request):
 
 def summoner(request):
     context = {}
-    summonerName = request.GET.get('summonerName', None)
+    summonerName = request.GET.get('summonerName', None).lower()
     region = request.GET.get('region', None)
     if not summonerName or not region:
         #TODO: ADD ERROR PAGE(?)
@@ -29,8 +29,8 @@ def summoner(request):
 
 def champion(request):
     context = {}
-    championName = request.GET.get('championName', None)
-    summonerName = request.GET.get('summonerName', None)
+    championName = request.GET.get('championName', None).lower()
+    summonerName = request.GET.get('summonerName', None).lower()
     region = request.GET.get('region', None)
     if not summonerName or not region or not championName:
         #TODO: ADD ERROR PAGE(?)
