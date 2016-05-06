@@ -28,6 +28,8 @@ class RiotAPI(object):
     def __init__(self, api_key, region=Consts.ENDPOINTS['NA']['region']):
         self.api_key = api_key
         self.region = region
+        self.staticChampionList = self.getChampionListById()
+        self.staticChampionListByName = self.getChampionListByName()
 
     def _request(self, api_url, params={}, isGlobal=False):
         args = {'api_key': self.api_key}
@@ -47,7 +49,7 @@ class RiotAPI(object):
     def getSummonerByName(self, name):
         api_url = Consts.URL['summoner_by_name'].format(region=self.region,
                                                         version=Consts.API_VERSIONS['summoner'],
-                                                        names=name)
+                                                        names=name.lower())
         return self._request(api_url)
 
     def getChampionMasteryList(self, summonerId, limit=None):
@@ -70,7 +72,6 @@ class RiotAPI(object):
             currentChampionInfo.championIcon = self.getChampionImageSource(self.getChampionKey(champion['championId']))
             # Assuming 50% win rate.
             currentChampionInfo.gamesNeeded = masteryPointFormula.pointsRequired(float(champion['championPoints']), 21600, 0.5)
-
             championMasteryList.append(currentChampionInfo)
         return championMasteryList
 
@@ -100,7 +101,8 @@ class RiotAPI(object):
         champion.championPoints = championJson['championPoints'];
         champion.pointsUntilNextLevel = championJson['championPointsUntilNextLevel'];
         champion.pointsSinceLastLevel = championJson['championPointsSinceLastLevel'];
-        champion.championIcon = self.getChampionImageSource(self.getChampionKey(championJson['championId']))
+        championKey = self.getChampionKey(championJson['championId'])
+        champion.championIcon = self.getChampionImageSource(championKey)
         champion.gamesNeeded = masteryPointFormula.pointsRequired(float(champion.championPoints), 21600, 0.5)
         return champion
 
@@ -114,41 +116,68 @@ class RiotAPI(object):
         return False
 
     def getChampionImageSource(self, championKey):
-        version = self.getLatestVersion()
+        version = self.getLatestLeagueVersion()
         return 'http://ddragon.leagueoflegends.com/cdn/{version}/img/champion/{championKey}.png'.format(version=version,
                                                                                                         championKey=championKey)
 
-    def getLatestVersion(self):
+    def getChampionBackgroundImage(self, championKey):
+        return 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{championKey}_0.jpg'.format(championKey=championKey)
+
+    def getLatestLeagueVersion(self):
         api_url = Consts.URL['league_version'].format(region=self.region.lower(),version =Consts.API_VERSIONS['static-data'])
         versionJson = self._request(api_url, isGlobal=True)
         return versionJson[0]
 
     #local for now
-    def getChampionKey(self, championId, version=None):
-        with open('static-champion-data.json') as staticChampionData:    
-            data = (json.load(staticChampionData))['data']
-            return data[str(championId)]['key']
+    def getChampionKey(self, championId, local=False):
+        if local:
+            with open('static-champion-data.json') as staticChampionData:    
+                data = (json.load(staticChampionData))['data']
+                return data[str(championId)]['key']
+        else:
+            return self.staticChampionList[str(championId)]['key']
 
     #local for now
-    def getChampionId(self, championName):
-        with open('static-champion-data.json', 'r') as staticChampionData:    
-            data = (json.load(staticChampionData))['data']
-            for k,v in data.items():
-                if v['name'].lower() == championName.lower():
-                    return v['id']
+    def getChampionId(self, championName, local=False):
+        championName = championName.lower()
+        if local:
+            with open('static-champion-data.json', 'r') as staticChampionData:    
+                data = (json.load(staticChampionData))['data']
+                for k,v in data.items():
+                    if v['name'].lower() == championName:
+                        return v['id']
+        else:
+            #NOTE: once we have a functional search engine, this loop shouldn't be necessary
+            for k,v in self.staticChampionListByName.items():
+                if k.lower() == championName:
+                    return v['id'] 
 
-    def getChampionNameById(self,championId, region=None):
-        if region is None: #static file to consume less time
+    def getChampionNameById(self,championId, local=False):
+        if local: 
             with open('static-champion-data.json', 'r') as staticChampionData:    
                 data = (json.load(staticChampionData))['data']
                 return data[str(championId)]['name']
         else:
-            api_url = Consts.URL['champion_by_id'].format(region=self.region.lower(),
-                                                        version=Consts.API_VERSIONS['static-data'],
-                                                        id=championId)
-            championJson = self._request(api_url, isGlobal=True)
-            print championJson
-            return championJson['name']
+            return self.staticChampionList[str(championId)]['name']
+            # api_url = Consts.URL['champion_by_id'].format(region=self.region.lower(),
+            #                                             version=Consts.API_VERSIONS['static-data'],
+            #                                             id=championId)
+            # championJson = self._request(api_url, isGlobal=True)
+            # return championJson['name']
+
+#    'champion_list_by_id': "api/lol/static-data/{region}/v{version}/champion?dataById=true",
+
+    def getChampionListById(self):
+        api_url = Consts.URL['champion_list_by_id'].format(region=self.region.lower(),
+                                                        version=Consts.API_VERSIONS['static-data'])
+        championsJson = self._request(api_url, isGlobal=True)
+        return championsJson['data']
+
+    def getChampionListByName(self):
+        api_url = Consts.URL['champion_list_by_name'].format(region=self.region.lower(),
+                                                        version=Consts.API_VERSIONS['static-data'])
+        championsJson = self._request(api_url, isGlobal=True)
+        return championsJson['data']
 
 
 

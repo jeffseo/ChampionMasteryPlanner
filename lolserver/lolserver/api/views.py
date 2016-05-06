@@ -13,7 +13,7 @@ def index(request):
 
 def summoner(request):
     context = {}
-    summonerName = request.GET.get('summonerName', None).lower()
+    summonerName = request.GET.get('summonerName', None)
     region = request.GET.get('region', None)
     if not summonerName or not region:
         #TODO: ADD ERROR PAGE(?)
@@ -21,8 +21,8 @@ def summoner(request):
         return render(request, 'error')
     else:
         api = RiotAPI(RiotConstants.API_KEY, region)
-        summonerId = api.getSummonerByName(summonerName)[summonerName]['id']
-        championList = api.getChampionMasteryList(summonerId)
+        summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
+        championList = api.getChampionMasteryList(summonerId,10)
         context['summonerName'] = summonerName
         context['region'] = region
         context['championList'] = championList
@@ -30,8 +30,8 @@ def summoner(request):
 
 def champion(request):
     context = {}
-    championName = request.GET.get('championName', None).lower()
-    summonerName = request.GET.get('summonerName', None).lower()
+    championName = request.GET.get('championName', None)
+    summonerName = request.GET.get('summonerName', None)
     region = request.GET.get('region', None)
     if not summonerName or not region or not championName:
         #TODO: ADD ERROR PAGE(?)
@@ -39,7 +39,7 @@ def champion(request):
         return render(request, 'error')
     else:
         api = RiotAPI(RiotConstants.API_KEY, region)
-        summonerId = api.getSummonerByName(summonerName)[summonerName]['id']
+        summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
         championMastery = api.getChampionMastery(summonerId, api.getChampionId(championName))
         context['championName'] = championName
         context['summonerName'] = summonerName
