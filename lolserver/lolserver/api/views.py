@@ -55,7 +55,8 @@ def champion(request):
         context['gamesNeeded'] = masteryPointFormula.pointsRequired(api.getChampionMastery(summonerId, api.getChampionId(championName)).championPoints, 21600, 0.5)
         
         championList = api.getChampionMasteryList(summonerId)
-        # creating a list of champions for dropdown in champion search bar.
+        context['championList'] = championList
+        #creating a list of champions for dropdown in champion search bar.
         championListOrdered = []
         for champion in championList:
             championListOrdered.append(champion.championName)
