@@ -26,6 +26,13 @@ def summoner(request):
         context['summonerName'] = summonerName
         context['region'] = region
         context['championList'] = championList
+        
+        # creating a list of champions for dropdown in champion search bar.
+        championListOrdered = []
+        for champion in championList:
+            championListOrdered.append(champion.championName)
+        championListOrdered.sort()
+        context['orderedChampionList'] = championListOrdered
         return render(request,'templates/summoner.html', context)
 
 def champion(request):
@@ -46,5 +53,13 @@ def champion(request):
         context['region'] = region
         context['champion'] = api.getChampionMastery(summonerId, api.getChampionId(championName))
         context['gamesNeeded'] = masteryPointFormula.pointsRequired(api.getChampionMastery(summonerId, api.getChampionId(championName)).championPoints, 21600, 0.5)
+        
+        championList = api.getChampionMasteryList(summonerId)
+        # creating a list of champions for dropdown in champion search bar.
+        championListOrdered = []
+        for champion in championList:
+            championListOrdered.append(champion.championName)
+        championListOrdered.sort()
+        context['orderedChampionList'] = championListOrdered     
         return render(request,'templates/champion.html', context)    
 
