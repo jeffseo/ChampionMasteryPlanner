@@ -116,7 +116,7 @@ class RiotAPI(object):
                         return True
         else:
             for k,v in self.staticChampionListByName.items():
-                if k.lower() == championName:
+                if v['name'] == championName:
                     return v['id'] 
         return False
 
@@ -144,17 +144,16 @@ class RiotAPI(object):
 
     #local for now
     def getChampionId(self, championName, local=False):
-        championName = championName.lower()
         if local:
+            championName = championName.lower()
             with open('static-champion-data.json', 'r') as staticChampionData:    
                 data = (json.load(staticChampionData))['data']
                 for k,v in data.items():
                     if v['name'].lower() == championName:
                         return v['id']
         else:
-            #NOTE: once we have a functional search engine, this loop shouldn't be necessary
             for k,v in self.staticChampionListByName.items():
-                if k.lower() == championName:
+                if v['name'] == championName:
                     return v['id'] 
 
     def getChampionNameById(self,championId, local=False):

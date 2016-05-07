@@ -29,8 +29,9 @@ def summoner(request):
         
         # creating a list of champions for dropdown in champion search bar.
         championListOrdered = []
-        for champion in championList:
-            championListOrdered.append(champion.championName)
+
+        for k,v in api.getChampionListByName().items():
+            championListOrdered.append(v['name'])
         championListOrdered.sort()
         context['orderedChampionList'] = championListOrdered
         return render(request,'templates/summoner.html', context)
@@ -47,19 +48,17 @@ def champion(request):
     else:
         api = RiotAPI(RiotConstants.API_KEY, region)
         summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
-        championMastery = api.getChampionMastery(summonerId, api.getChampionId(championName))
         context['championName'] = championName
         context['summonerName'] = summonerName
         context['region'] = region
         context['champion'] = api.getChampionMastery(summonerId, api.getChampionId(championName))
         context['gamesNeeded'] = masteryPointFormula.pointsRequired(api.getChampionMastery(summonerId, api.getChampionId(championName)).championPoints, 21600, 0.5)
         
-        championList = api.getChampionMasteryList(summonerId)
         # creating a list of champions for dropdown in champion search bar.
         championListOrdered = []
-        for champion in championList:
-            championListOrdered.append(champion.championName)
+        for k,v in api.getChampionListByName().items():
+            championListOrdered.append(v['name'])
         championListOrdered.sort()
-        context['orderedChampionList'] = championListOrdered     
+        context['orderedChampionList'] = championListOrdered
         return render(request,'templates/champion.html', context)    
 
