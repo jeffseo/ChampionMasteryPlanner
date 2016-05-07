@@ -15,12 +15,14 @@ def summoner(request):
     context = {}
     summonerName = request.GET.get('summonerName', None).lower()
     region = request.GET.get('region', None)
+    context['errorFlag'] = "false"
     if not summonerName or not region:
         #TODO: ADD ERROR PAGE(?)
         print 'error'
         return render(request, 'error')
     else:
         api = RiotAPI(RiotConstants.API_KEY, region)
+        # Catches TypeError when user enters invalid summoner name.
         try:
             summonerId = api.getSummonerByName(summonerName)[summonerName]['id']
             championList = api.getChampionMasteryList(summonerId)
@@ -51,6 +53,7 @@ def champion(request):
         print 'error'
         return render(request, 'error')
     else:
+        
         api = RiotAPI(RiotConstants.API_KEY, region)
         summonerId = api.getSummonerByName(summonerName)[summonerName]['id']
         championMastery = api.getChampionMastery(summonerId, api.getChampionId(championName))
