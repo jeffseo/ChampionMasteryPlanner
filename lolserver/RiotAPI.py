@@ -107,12 +107,17 @@ class RiotAPI(object):
         return champion
 
     #local for now
-    def isChampionNameValid(self, championName):
-        with open('static-champion-data.json', 'r') as staticChampionData:    
-            data = (json.load(staticChampionData))['data']
-            for k,v in data.items():
-                if v['name'].lower() == championName.lower():
-                    return True
+    def isChampionNameValid(self, championName, local=False):
+        if local:
+            with open('static-champion-data.json', 'r') as staticChampionData:    
+                data = (json.load(staticChampionData))['data']
+                for k,v in data.items():
+                    if v['name'].lower() == championName.lower():
+                        return True
+        else:
+            for k,v in self.staticChampionListByName.items():
+                if k.lower() == championName:
+                    return v['id'] 
         return False
 
     def getChampionImageSource(self, championKey):
