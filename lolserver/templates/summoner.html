@@ -14,7 +14,7 @@
 								placeholder: "Select Champion", 
 								allowClear: true,
 								theme: "classic",
-								width: '100%' 
+								width: "480px" 
 								});
 							});
 						</script>
@@ -27,7 +27,7 @@
 							color: #333
 						}
 						</style>
-						<select class="js-basic-single" name="championName">
+						<select class="js-basic-single" name="championName" onchange="this.form.submit();">
 							<option></option>
 							
 							{% for champion in orderedChampionList %}
@@ -36,9 +36,6 @@
 						</select>
                     <input type="hidden" name="summonerName" value={{summonerName}} />
                     <input type="hidden" name="region" value={{region}} />
-                    <span class="input-group-btn">
-                        <input required="true" class="btn btn-default" type="submit" value="Submit"/>
-                    </span>
                 </div>
             </form>
         </div>

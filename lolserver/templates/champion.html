@@ -4,7 +4,7 @@
 <h1 class="cover-heading">Summoner: {{ summonerName }}</h1>
 <div class="row" id="champion info" >
     <div class="row">
-        <p class="lead" id="cover-info">Enter champion name</p>
+        <p class="lead" id="cover-info">Select Champion below</p>
         <div class="col-md-6 col-md-offset-3">
             <form action="" method="get" id="champion-form">
                 <div class="input-group">
@@ -15,34 +15,31 @@
 								placeholder: "Select Champion", 
 								allowClear: true,
 								theme: "classic",
-								width: '100%' 
+								width: "480px"
 								});
 							});
 						</script>
 						<style>
 						.select2-search__field {
-							color: #333
+							color: #333;
 						}
 						
 						.select2-results__options {
-							color: #333
+							color: #333;
 						}
+
 						</style>
-						<select class="js-basic-single" name="championName">
+						<select class="js-basic-single" name="championName" onchange="this.form.submit();">
 							<option></option>
 							
 							{% for champion in orderedChampionList %}
 								<option value={{champion}}>{{champion}}</option>
 							{% endfor %}
 							
-							<!--{% for champion in championList %}
-								<option value={{champion.championName}}>{{champion.championName}}</option>
-							{% endfor %} -->
-							
 						</select>
-						<span class="input-group-btn">
+						<!-- <span class="input-group-btn">
                         <input class="btn btn-default" type="submit" value="Submit" required value="">
-                    </span>
+						</span> -->
                     <input type="hidden" name="summonerName" value={{summonerName}} />
                     <input type="hidden" name="region" value={{region}} /> 
                     
