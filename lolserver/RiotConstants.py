@@ -17,7 +17,9 @@ URL = {
     'champion_by_id' : 'api/lol/static-data/{region}/v{version}/champion/{id}',
     'top_champion_mastery': 'championmastery/location/{platformId}/player/{playerId}/topchampions?count={count}',
     'all_champion_mastery': "championmastery/location/{platformId}/player/{playerId}/champions",
-    'single_champion_mastery': '/championmastery/location/{platformId}/player/{playerId}/champion/{championId}',
+    'single_champion_mastery': 'championmastery/location/{platformId}/player/{playerId}/champion/{championId}',
+    'champion_list_by_id': "api/lol/static-data/{region}/v{version}/champion?dataById=true",
+    'champion_list_by_name': "api/lol/static-data/{region}/v{version}/champion",
     'league_version' : "api/lol/static-data/{region}/v{version}/versions"
 }
 
