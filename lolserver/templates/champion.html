@@ -53,18 +53,6 @@
     </div>
     <div class="row" id="champion row">
     <h2 class="cover-heading">Champion Mastery: {{ championName }}</h2>
-		<input id="winRate" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="50"/>
-		<span id="winRateLabel">Select Win Rate: <span id="winRateVal">50</span></span>
-		<script>
-			$("#winRate").slider();
-			$("#winRate").on("slide", function(slideEvt) {
-			$("#winRateVal").text(slideEvt.value);
-			});
-		</script>
-		<form>
-		<input id="pointsDesired" type="text">Enter Number of Champion Points Desired</input>
-		
-		</form>
 		
         <div class="col-md-12" id="champion-data">
             <!-- todo: clean up to a css -->
