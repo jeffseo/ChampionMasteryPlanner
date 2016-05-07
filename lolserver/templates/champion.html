@@ -11,24 +11,38 @@
                     <!--<input type="text" class="form-control" placeholder="champion name" name="championName" required value=""> -->
 					   <script type="text/javascript">
 							$(document).ready(function() {
-								$(".js-example-basic-single").select2({ 
+								$(".js-basic-single").select2({ 
 								placeholder: "Select Champion", 
 								allowClear: true,
+								theme: "classic",
 								width: '100%' 
 								});
 							});
 						</script>
-
-						<select class="js-example-basic-single">
+						<style>
+						.select2-search__field {
+							color: #333
+						}
+						
+						.select2-results__options {
+							color: #333
+						}
+						</style>
+						<select class="js-basic-single" name="championName">
+							<option></option>
 							
-							<option value="Katarina" name="championName">Katarina</option>
-							<option value="Udyr" name="championName">Udyr</option>
+							{% for champion in orderedChampionList %}
+								<option value={{champion}}>{{champion}}</option>
+							{% endfor %}
+							
 						</select>
-                    <input type="hidden" name="summonerName" value={{summonerName}} />
-                    <input type="hidden" name="region" value={{region}} />
-                    <span class="input-group-btn">
+						<span class="input-group-btn">
                         <input class="btn btn-default" type="submit" value="Submit">
                     </span>
+                    <input type="hidden" name="summonerName" value={{summonerName}} />
+                    <input type="hidden" name="region" value={{region}} /> 
+                    
+					  
                 </div>
             </form>
         </div>
