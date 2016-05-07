@@ -21,19 +21,25 @@ def summoner(request):
         return render(request, 'error')
     else:
         api = RiotAPI(RiotConstants.API_KEY, region)
-        summonerId = api.getSummonerByName(summonerName)[summonerName]['id']
-        championList = api.getChampionMasteryList(summonerId)
-        context['summonerName'] = summonerName
-        context['region'] = region
-        context['championList'] = championList
+        try:
+            summonerId = api.getSummonerByName(summonerName)[summonerName]['id']
+            championList = api.getChampionMasteryList(summonerId)
+            context['summonerName'] = summonerName
+            context['region'] = region
+            context['championList'] = championList
         
-        # creating a list of champions for dropdown in champion search bar.
-        championListOrdered = []
-        for champion in championList:
-            championListOrdered.append(champion.championName)
-        championListOrdered.sort()
-        context['orderedChampionList'] = championListOrdered
-        return render(request,'templates/summoner.html', context)
+            # creating a list of champions for dropdown in champion search bar.
+            championListOrdered = []
+            for champion in championList:
+                championListOrdered.append(champion.championName)
+            championListOrdered.sort()
+            context['orderedChampionList'] = championListOrdered
+            return render(request,'templates/summoner.html', context)
+        except TypeError:
+            print("TypeError")
+            context['errorFlag'] = "true"
+            context['summonerName'] = summonerName
+            return render(request, 'templates/main.html', context)
 
 def champion(request):
     context = {}

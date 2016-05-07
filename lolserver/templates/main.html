@@ -7,6 +7,15 @@
 
     <!-- Search bar -->
     <div class="col-md-6 col-md-offset-3">
+		 
+		 <p hidden class="lead" id="errorMsg">Summoner {{summonerName}} not found.</p>
+		 <script>
+
+		 if ({{ errorFlag }}){
+			
+			document.getElementById('errorMsg').hidden=false;
+		 }
+		 </script>
         <form action="summoner" method="get" id="searchForm">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="summoner name" name="summonerName" required value="">
