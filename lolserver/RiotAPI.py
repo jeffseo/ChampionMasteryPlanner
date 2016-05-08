@@ -15,19 +15,16 @@ class ChampionInfo(object):
         self.gamesNeededForNextLevel = None
         self.gamesNeededForLevel5 = None
         self.championTitle = None
-        self.chestGranted = None
+        self.chestGranted = False
+        self.highestRank = "N/A"
 
     def setUnplayedInfo(self, championName):
         self.championName = championName
         self.championLevel = 1
         self.championPoints = 0
         self.pointsUntilNextLevel = Consts.MASTERY_POINTS[2]
-        self.championIcon = None
         self.gamesNeededForNextLevel = masteryPointFormula.gamesRequired(0, Consts.MASTERY_POINTS[2], 0.5)
         self.gamesNeededForLevel5 = masteryPointFormula.gamesRequired(0, Consts.MASTERY_POINTS[5], 0.5)
-        self.championTitle = None
-        self.chestGranted = False
-
 
 class RiotAPI(object):
 
@@ -95,9 +92,12 @@ class RiotAPI(object):
 #    "lastPlayTime": 1462081320000
 # }
     def getChampionMastery(self, playerId, championId):
+        api_url_all = Consts.URL['all_champion_mastery'].format(platformId=Consts.ENDPOINTS[self.region]['platform'],
+                                                                playerId=playerId)
         api_url = Consts.URL['single_champion_mastery'].format( platformId=Consts.ENDPOINTS[self.region]['platform'],
                                                                 playerId=playerId,
                                                                 championId=championId)
+        championAllJson = self._request(api_url_all)
         championJson = self._request(api_url)
         champion = ChampionInfo()
         if not championJson:
@@ -113,9 +113,15 @@ class RiotAPI(object):
         championKey = self.getChampionKey(championJson['championId'])
         champion.championIcon = self.getChampionImageSource(championKey)       
         champion.championTitle = self.getChampionTitleById(championId) 
-        champion.chestGranted = championJson['chestGranted']
         champion.gamesNeededForNextLevel = masteryPointFormula.gamesRequired(float(championJson['championPoints']), float(championJson['championPoints'])+float(championJson['championPointsUntilNextLevel']), 0.5)
         champion.gamesNeededForLevel5 = masteryPointFormula.gamesRequired(float(championJson['championPoints']), Consts.MASTERY_POINTS[5], 0.5)
+        #for some reason, getting single champ mastery info always returns chestGranted = false
+        for championMastery in championAllJson:
+            if championMastery['championId'] == championId:
+                if 'highestGrade' in championMastery:
+                    champion.highestRank = championMastery['highestGrade']
+                champion.chestGranted = championMastery['chestGranted']
+                break
         return champion
 
     #local for now
