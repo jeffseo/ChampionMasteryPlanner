@@ -87,7 +87,6 @@
                                 {
                                     showEstimation();
                                 }
-                                //console.log(document.getElementById("estimation-info").style);
                             });
                     </script>
                 </div>
@@ -104,6 +103,9 @@
             </div>
         </form>
         <div class="transbox">
+            <h4 id="estimation-default" style="display:block">
+            Please enter number of points and click the "Estimate!" button to <i>estimate</i> :)
+            </h4>
             <h4 id="estimation-info" style="display:none">
             </h4>
         </div>
@@ -114,6 +116,10 @@
                 var winRate = document.getElementById("winRateVal").innerHTML;
                 var gamesNeeded = gamesRequired(currentPoints,desiredPoints,winRate/100);
                 document.getElementById("estimation-info").innerHTML = "At <u>" + winRate +"</u>% Win ratio, you need to play approximately <u>" + gamesNeeded + "</u> games to acquire <u>" + desiredPoints + "</u> Champion Points";
+                if (document.getElementById("estimation-default").style.display == "block")
+                {
+                    document.getElementById("estimation-default").style = "display:none";
+                }
                 document.getElementById("estimation-info").style = "display:block";
             }
         </script>
