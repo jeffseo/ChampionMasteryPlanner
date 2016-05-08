@@ -31,7 +31,7 @@
 							<option></option>
 							
 							{% for champion in orderedChampionList %}
-								<option value={{champion}}>{{champion}}</option>
+								<option value={{champion.1}}>{{champion.0}}</option>
 							{% endfor %}
 						</select>
                     <input type="hidden" name="summonerName" value={{summonerName}} />
@@ -54,16 +54,22 @@
                     <th style='width: 100px; text-align: center; background-color:#000000;'>Mastery Level</th>
                     <th style='width: 100px; red; text-align: center; background-color:#000000;'>Mastery Points</th>
                     <th style='width: 100px; red; text-align: center; background-color:#000000;'>Points for level</th>
-                    <th style='width: 100px; red; text-align: center; background-color:#000000;'>Games needed</th>
+                    <th style='width: 100px; red; text-align: center; background-color:#000000;'>Games needed for level</th>
+                    <th style='width: 100px; red; text-align: center; background-color:#000000;'>Games needed for level 5</th>
                 </tr>
             {% for champion in championList|slice:":10" %}
                 <tr>
                 <td style='width: 100px;text-align:center; background-color:#000033;'><img src="{{ champion.championIcon}}" width="40" height="40"></td>
-                <td style='width: 100px; text-align:center; background-color:#000033;'>{{ champion.championName }}</td>
+                {% for championKey in orderedChampionList %}
+                    {% if champion.championName == championKey.0 %}
+                        <td style='width: 100px; text-align:center; background-color:#000033;'><a href="/summoner/champion?summonerName={{summonerName}}&region={{region}}&championName={{ championKey.1 }}">{{ champion.championName }}</a></td>
+                    {% endif %}
+                {% endfor %}
                 <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.championLevel }}</td>
                 <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.championPoints }}</td>
                 <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.pointsUntilNextLevel }}</td>
-                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.gamesNeeded }}</td>
+                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.gamesNeededForNextLevel }}</td>
+                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.gamesNeededForLevel5 }}</td>
                 </tr>
             {% endfor %}
             </table><bg-helper></bg-helper>

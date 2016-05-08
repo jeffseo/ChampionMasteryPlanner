@@ -1,7 +1,7 @@
 {% extends "templates/base.html" %}
 
 {% block content %}
-<h1 class="cover-heading">Summoner: {{ summonerName }}</h1>
+<h1 class="cover-heading">Summoner: <b>{{ summonerName }}</b></h1>
 <div class="row" id="champion info" >
     <div class="row">
         <p class="lead" id="cover-info">Enter champion name</p>
@@ -32,7 +32,7 @@
 							<option></option>
 							
 							{% for champion in orderedChampionList %}
-								<option value={{champion}}>{{champion}}</option>
+								<option value={{champion.1}}>{{champion.0}}</option>
 							{% endfor %}
 							
 						</select>
@@ -47,28 +47,85 @@
             </form>
         </div>
     </div>
-    <div class="row" id="champion row">
-    <h2 class="cover-heading">Champion Mastery: {{ championName }}</h2>            
-        <div class="col-md-12" id="champion-data">
-            <!-- todo: clean up to a css -->
-            <table class='table' style='border: 1px white;'>
-                <tr>
-                    <th style='text-align: center; background-color:#000000;\'></th>
-                    <th style='width: 100px; text-align: center; background-color:#000000;'>Champion</th>
-                    <th style='width: 100px; text-align: center; background-color:#000000;'>Mastery Level</th>
-                    <th style='width: 100px; red; text-align: center; background-color:#000000;'>Mastery Points</th>
-                    <th style='width: 100px; red; text-align: center; background-color:#000000;'>Points for level</th>
-                    <th style='width: 100px; red; text-align: center; background-color:#000000;'>Games needed</th>
-                </tr>
-                <tr>
-                <td style='width: 100px;text-align:center; background-color:#000033;'><img src="{{ champion.championIcon }}" width="40" height="40"></td>
-                <td style='width: 100px; text-align:center; background-color:#000033;'>{{ champion.championName }}</td>
-                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.championLevel }}</td>
-                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.championPoints }}</td>
-                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.pointsUntilNextLevel }}</td>
-                <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.gamesNeeded }}</td></tr>
-            </table><bg-helper></bg-helper>
+
+    <div class="row">
+        <h2 class="cover-heading">Champion Mastery: <b>{{ champion.championName }}</b></h2>
+        <div class="col-md-6">
+            <img src="{{ championImage }}" alot="champion image" width='400px' height='325px' class = "avatar">
+            <h4><span class="label label-primary">{{ championName }}: {{ champion.championTitle }}</span></h4>
         </div>
+        <div class="col-md-6">
+            <div class="transbox">
+                <h3>Champion mastery details:</h3>
+                <ul>
+                    <li><h4 class="text-left">Mastery Level: <b>{{ champion.championLevel }}</b></h4></li>
+                    <li><h4 class="text-left">Mastery Points: <b>{{ champion.championPoints }} CP</b></h4> </li>
+                    <li><h4 class="text-left">Points needed until next level: <b>{{ champion.pointsUntilNextLevel }} CP</b></h4></li>
+                    <li><h4 class="text-left">Games needed until next level: <b id="games-needed">{{ champion.gamesNeededForNextLevel }}</b></h4></li>
+                    <li><h4 class="text-left">Games needed until level 5: <b id ="games-needed-5">{{ champion.gamesNeededForLevel5 }}</b></h4></li>
+                    <li><h4 class="text-left">Hextech chest availability: <b>{{ champion.chestGranted }}</b></h4></li>
+                    <li><h4 class="text-left">Season Highest Grade: <b>{{ champion.highestRank }}</b></h4></li>
+                </ul>
+            </div>
+        </div>
+        <form role="form">
+            <div class="form-group">
+                <div class="col-md-6 col-md-offset-3">
+                    <label for="winRate">Select Win Rate: <span id="winRateVal">50</span></label>
+                    <input id="winRate" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="5" data-slider-value="50" data-slider-id="winRate"/>
+                    <style>
+                        #winRate .slider-selection {
+                            background: #BABABA;
+                        }
+                    </style>            
+                    <script>
+                            $("#winRate").slider();
+                            $("#winRate").on("slide", function(slideEvt) {
+                                $("#winRateVal").text(slideEvt.value);
+                                document.getElementById("games-needed").innerHTML = gamesRequired({{champion.championPoints}},{{champion.championPoints}}+{{champion.pointsUntilNextLevel}}, slideEvt.value/100);
+                                document.getElementById("games-needed-5").innerHTML = gamesRequired({{champion.championPoints}},{{championMasteryFor5}},slideEvt.value/100);
+                                if (document.getElementById("estimation-info").style.display != "none")
+                                {
+                                    showEstimation();
+                                }
+                            });
+                    </script>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <form action="javascript:showEstimation()" role="form-horizontal">
+            <div class="form-group">
+                <label for="pointsDesired" class="col-md-6 col-md-offset-1 control-label">Enter Number of Champion Points Desired:</label>
+                <input style='width:150px; height:25px' id="pointsDesired" type="number" placeholder="1000000" class="col-md-3 col-md-pull-1 form-control" required value=""/>
+                <button type="submit" class="btn btn-primary">Estimate!</button>
+            </div>
+        </form>
+        <div class="transbox">
+            <h4 id="estimation-default" style="display:block">
+            Please enter number of points and click the "Estimate!" button to <i>estimate</i> :)
+            </h4>
+            <h4 id="estimation-info" style="display:none">
+            </h4>
+        </div>
+        <script>
+            function showEstimation() {
+                var currentPoints = {{ champion.championPoints }};
+                var desiredPoints = document.getElementById("pointsDesired").value;
+                var winRate = document.getElementById("winRateVal").innerHTML;
+                var gamesNeeded = gamesRequired(currentPoints,desiredPoints,winRate/100);
+                var avgGameTime = 35
+                var minutesNeeded = minutesRequired(gamesNeeded,avgGameTime)
+                document.getElementById("estimation-info").innerHTML = "At <u>" + winRate +"</u>% Win ratio, you need to play approximately <u>" + gamesNeeded + "</u> games (~<u>" + minutesNeeded + "</u> minutes) to acquire <u>" + desiredPoints + "</u> Champion Points";
+                if (document.getElementById("estimation-default").style.display == "block")
+                {
+                    document.getElementById("estimation-default").style = "display:none";
+                }
+                document.getElementById("estimation-info").style = "display:block";
+            }
+        </script>
     </div>
 </div>
 {% endblock %}

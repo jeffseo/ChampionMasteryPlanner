@@ -31,33 +31,35 @@ def summoner(request):
         championListOrdered = []
 
         for k,v in api.getChampionListByName().items():
-            championListOrdered.append(v['name'])
+            championListOrdered.append([v['name'],v['key']])
         championListOrdered.sort()
         context['orderedChampionList'] = championListOrdered
         return render(request,'templates/summoner.html', context)
 
 def champion(request):
     context = {}
-    championName = request.GET.get('championName', None)
+    championKey = request.GET.get('championName', None)
     summonerName = request.GET.get('summonerName', None)
     region = request.GET.get('region', None)
-    if not summonerName or not region or not championName:
+    if not summonerName or not region or not championKey:
         #TODO: ADD ERROR PAGE(?)
         print 'error'
         return render(request, 'error')
     else:
         api = RiotAPI(RiotConstants.API_KEY, region)
+        championName = api.getChampionNameByKey(championKey)
         summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
+        championId = api.getChampionId(championName)
+        context['championMasteryFor5'] = RiotConstants.MASTERY_POINTS[5]
         context['championName'] = championName
         context['summonerName'] = summonerName
         context['region'] = region
-        context['champion'] = api.getChampionMastery(summonerId, api.getChampionId(championName))
-        context['gamesNeeded'] = masteryPointFormula.pointsRequired(api.getChampionMastery(summonerId, api.getChampionId(championName)).championPoints, 21600, 0.5)
-        
+        context['champion'] = api.getChampionMastery(summonerId, championId)
+        context['championImage'] = api.getChampionBackgroundImage(championKey)
         # creating a list of champions for dropdown in champion search bar.
         championListOrdered = []
         for k,v in api.getChampionListByName().items():
-            championListOrdered.append(v['name'])
+            championListOrdered.append([v['name'],v['key']])
         championListOrdered.sort()
         context['orderedChampionList'] = championListOrdered
         return render(request,'templates/champion.html', context)    
