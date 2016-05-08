@@ -116,7 +116,9 @@
                 var desiredPoints = document.getElementById("pointsDesired").value;
                 var winRate = document.getElementById("winRateVal").innerHTML;
                 var gamesNeeded = gamesRequired(currentPoints,desiredPoints,winRate/100);
-                document.getElementById("estimation-info").innerHTML = "At <u>" + winRate +"</u>% Win ratio, you need to play approximately <u>" + gamesNeeded + "</u> games to acquire <u>" + desiredPoints + "</u> Champion Points";
+                var avgGameTime = 35
+                var minutesNeeded = minutesRequired(gamesNeeded,avgGameTime)
+                document.getElementById("estimation-info").innerHTML = "At <u>" + winRate +"</u>% Win ratio, you need to play approximately <u>" + gamesNeeded + "</u> games (~<u>" + minutesNeeded + "</u> minutes) to acquire <u>" + desiredPoints + "</u> Champion Points";
                 if (document.getElementById("estimation-default").style.display == "block")
                 {
                     document.getElementById("estimation-default").style = "display:none";

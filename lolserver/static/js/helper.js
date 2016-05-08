@@ -21,3 +21,7 @@ function gamesRequired(currentPoints, desiredPoints, winRate) {
         return Math.ceil(neededPoints/avgPointPerGame);
     }
 }
+
+function minutesRequired(numOfGamesNeeded, avgGameTime) {
+    return avgGameTime * numOfGamesNeeded;
+}
