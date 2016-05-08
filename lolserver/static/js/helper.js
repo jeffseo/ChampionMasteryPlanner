@@ -9,7 +9,7 @@ function gamesRequired(currentPoints, desiredPoints, winRate) {
     // determined using a regression model (see the Excel file).
     var pointsForWin = 1256.58792651;
     var pointsForLoss = 222.266550523;
-    console.log(currentPoints,desiredPoints,winRate);
+
     var neededPoints = desiredPoints - currentPoints;
     if (neededPoints <= 0)
     {
@@ -18,8 +18,6 @@ function gamesRequired(currentPoints, desiredPoints, winRate) {
     else
     {
         var avgPointPerGame = winRate * pointsForWin + (1- winRate) * pointsForLoss;
-        console.log(avgPointPerGame);
-        console.log(Math.ceil(neededPoints/avgPointPerGame));
         return Math.ceil(neededPoints/avgPointPerGame);
     }
 }

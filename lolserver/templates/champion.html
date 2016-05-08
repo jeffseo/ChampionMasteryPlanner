@@ -63,6 +63,7 @@
                     <li><h4 class="text-left">Points needed until next level: <b>{{ champion.pointsUntilNextLevel }} CP</b></h4></li>
                     <li><h4 class="text-left">Games needed until next level: <b id="games-needed">{{ champion.gamesNeededForNextLevel }}</b></h4></li>
                     <li><h4 class="text-left">Games needed until level 5: <b id ="games-needed-5">{{ champion.gamesNeededForLevel5 }}</b></h4></li>
+                    <li><h4 class="text-left">Hextech chest availability: <b>{{ champion.chestGranted }}</b></h4></li>
                 </ul>
             </div>
         </div>
@@ -82,6 +83,11 @@
                                 $("#winRateVal").text(slideEvt.value);
                                 document.getElementById("games-needed").innerHTML = gamesRequired({{champion.championPoints}},{{champion.championPoints}}+{{champion.pointsUntilNextLevel}}, slideEvt.value/100);
                                 document.getElementById("games-needed-5").innerHTML = gamesRequired({{champion.championPoints}},{{championMasteryFor5}},slideEvt.value/100);
+                                if (document.getElementById("estimation-info").style.display != "none")
+                                {
+                                    showEstimation();
+                                }
+                                //console.log(document.getElementById("estimation-info").style);
                             });
                     </script>
                 </div>

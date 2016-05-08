@@ -60,7 +60,11 @@
             {% for champion in championList|slice:":10" %}
                 <tr>
                 <td style='width: 100px;text-align:center; background-color:#000033;'><img src="{{ champion.championIcon}}" width="40" height="40"></td>
-                <td style='width: 100px; text-align:center; background-color:#000033;'>{{ champion.championName }}</td>
+                {% for championKey in orderedChampionList %}
+                    {% if champion.championName == championKey.0 %}
+                        <td style='width: 100px; text-align:center; background-color:#000033;'><a href="/summoner/champion?summonerName={{summonerName}}&region={{region}}&championName={{ championKey.1 }}">{{ champion.championName }}</a></td>
+                    {% endif %}
+                {% endfor %}
                 <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.championLevel }}</td>
                 <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.championPoints }}</td>
                 <td style='width: 100px; background-color:#000033; text-align: center;'>{{ champion.pointsUntilNextLevel }}</td>
