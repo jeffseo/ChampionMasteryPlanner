@@ -21,12 +21,13 @@ def summoner(request):
         return render(request, 'error')
     else:
         api = RiotAPI(RiotConstants.API_KEY, region)
-        summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
-        championList = api.getChampionMasteryList(summonerId,10)
         context['summonerName'] = summonerName
         context['region'] = region
+        summonerName = summonerName.replace(' ','')
+        summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
+        championList = api.getChampionMasteryList(summonerId,10)
+
         context['championList'] = championList
-        
         # creating a list of champions for dropdown in champion search bar.
         championListOrdered = []
 
@@ -48,11 +49,12 @@ def champion(request):
     else:
         api = RiotAPI(RiotConstants.API_KEY, region)
         championName = api.getChampionNameByKey(championKey)
+        context['summonerName'] = summonerName
+        summonerName = summonerName.replace(' ','')
         summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
         championId = api.getChampionId(championName)
         context['championMasteryFor5'] = RiotConstants.MASTERY_POINTS[5]
         context['championName'] = championName
-        context['summonerName'] = summonerName
         context['region'] = region
         context['champion'] = api.getChampionMastery(summonerId, championId)
         context['championImage'] = api.getChampionBackgroundImage(championKey)
