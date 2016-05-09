@@ -21,3 +21,19 @@ def gamesRequired(currentPoints, desiredPoints, winRate):
     else:
         avgPointPerGame = winRate * pointsForWin + (1 - winRate) * pointsForLoss
         return int(math.ceil(neededPoints / avgPointPerGame))
+
+def pointsForGame(duration, win):
+    """
+    win is a boolean representing if the game in question is a victory (True)
+    or less (False). The float duration represents the duration of the game
+    in question (in minutes).
+    
+    The int return value represents our estimate of the number of Champion
+    Mastery Points gained for the game in question. Our estimate in seen in the
+    Excel file named ChampMasteryData.
+    """
+    
+    if win:
+        return int((duration + 12.876) / 0.0381)
+    else:
+        return int((duration + 3.2743) / 0.1722)
