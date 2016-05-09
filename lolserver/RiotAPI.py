@@ -202,6 +202,12 @@ class RiotAPI(object):
     def getChampionTitleById(self,championId):
         return self.staticChampionList[str(championId)]['title']
 
+    def getRecentMatches(self,summonerId):
+        api_url = Consts.URL['recent_game'].format(region=self.region.lower(),
+                                                        version=Consts.API_VERSIONS['game'],
+                                                        summonerId=summonerId)
+        matchesJson = self._request(api_url)['games'][0]
+        print matchesJson
 
 
         

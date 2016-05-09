@@ -93,6 +93,7 @@ def champion(request):
             championListOrdered.append([v['name'],v['key']])
         championListOrdered.sort()
         context['orderedChampionList'] = championListOrdered
+        api.getRecentMatches(summonerId)
         return render(request,'templates/champion.html', context)    
 
 def info(request):

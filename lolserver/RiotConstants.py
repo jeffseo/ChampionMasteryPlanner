@@ -28,12 +28,15 @@ URL = {
     'single_champion_mastery': 'championmastery/location/{platformId}/player/{playerId}/champion/{championId}',
     'champion_list_by_id': "api/lol/static-data/{region}/v{version}/champion?dataById=true",
     'champion_list_by_name': "api/lol/static-data/{region}/v{version}/champion",
-    'league_version' : "api/lol/static-data/{region}/v{version}/versions"
+    'league_version' : "api/lol/static-data/{region}/v{version}/versions",
+    'recent_game': "/api/lol/{region}/v{version}/game/by-summoner/{summonerId}/recent"
+
 }
 
 API_VERSIONS = {
     'summoner': '1.4',
-    'static-data': '1.2'
+    'static-data': '1.2',
+    'game': '1.3'
 }
 
 #https://developer.riotgames.com/docs/regional-endpoints
