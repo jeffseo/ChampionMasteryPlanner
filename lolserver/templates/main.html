@@ -1,32 +1,54 @@
 {% extends "templates/base.html" %}
 
-{% block content %}
-<h1 class="cover-heading">Champion Mastery Planner</h1>
-<div class="row" id="search summoner">
-    <p class="lead" id="cover-info">Enter your summoner name for champion mastery info</p>
+{% block active_tab %}
+<li class="active"><a href="/">Home</a></li>
+<li><a href="/info">Info</a></li>
 
-    <!-- Search bar -->
-    <div class="col-md-6 col-md-offset-3">
+{% endblock %}
+
+{% block content %}
+<div class='transbox' style='opacity:.90'>
+    <div class="row">
+        <h1 class="cover-heading"><b>Champion Mastery Planner</b></h1>
+        <h3 id="cover-info">Plan out your champion mastery points!</h3>
+    </div>
+
+    <div class="row" id="search summoner">
+        <!-- Search bar -->
         <form action="summoner" method="get" id="searchForm">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="summoner name" name="summonerName" required value="">
-                <span class="input-group-btn">
-                    <input class="btn btn-default" type="submit" value="Submit">
-                </span>
-                <select class="form-control" id="sel1" name="region">
-                    <option>NA</option>
-                    <option>KR</option>
-                    <option>EUW</option>
-                    <option>EUNE</option>
-                    <option>JP</option>
-                    <option>LAN</option>
-                    <option>LAS</option>
-                    <option>OCE</option>
-                    <option>TR</option>
-                    <option>RU</option>
-                </select>
+                <div class="row" id="form">
+                    <div class="col-md-12">
+                        <div class="col-md-6 col-md-offset-3">
+                            <label for="summonerInput">Enter summoner name to get started:</label>
+                            <input type="text" class="form-control" id="summonerInput" placeholder="summoner name" name="summonerName" required value=""/ style="width:50%;margin-left:125px">
+                        </div>
+                        <div class="col-md-3">
+                            <label for="sel1">Region:</label>
+                            <select class="form-control" id="sel1" name="region" style="width:80%">
+                                <option>NA</option>
+                                <option>KR</option>
+                                <option>EUW</option>
+                                <option>EUNE</option>
+                                <option>JP</option>
+                                <option>LAN</option>
+                                <option>LAS</option>
+                                <option>OCE</option>
+                                <option>TR</option>
+                                <option>RU</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id='inputRow'>
+                    <div class="col-md-6 col-md-offset-3">
+                        <span class="input-group-btn">
+                            <input class="btn btn-primary" type="submit" value="Submit" style="width:100px">
+                        </span>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
-</div>
+    </div>
 {% endblock %}
