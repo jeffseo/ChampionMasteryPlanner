@@ -208,6 +208,3 @@ class RiotAPI(object):
                                                         summonerId=summonerId)
         matchesJson = self._request(api_url)['games']
         return matchesJson
-
-
-        
