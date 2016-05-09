@@ -206,8 +206,8 @@ class RiotAPI(object):
         api_url = Consts.URL['recent_game'].format(region=self.region.lower(),
                                                         version=Consts.API_VERSIONS['game'],
                                                         summonerId=summonerId)
-        matchesJson = self._request(api_url)['games'][0]
-        print matchesJson
+        matchesJson = self._request(api_url)['games']
+        return matchesJson
 
 
         
