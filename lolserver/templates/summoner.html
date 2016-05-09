@@ -7,50 +7,6 @@
 
 {% block content %}
 <h1 class="cover-heading">Summoner: {{ summonerName }}</h1>
-<div class='transbox' style='opacity:.90'>
-<style>
-	div.transbox{
-		background-color: #ffffff
-	}
-</style>
-<canvas id="summonerGraph" width="400" height="200"></canvas>
-<script>
-
-var data = {
-labels: {{ graphLabels|safe }},
-datasets: [
-    {
-    label: "Estimated Champion Points Gained by Day (Recent 10 Matches)",
-    fill: false,
-    lineTension: 0.1,
-    backgroundColor: "rgba(75,192,192,1)",
-    borderColor: "rgba(75,192,192,1)",
-    borderCapStyle: 'butt',
-    borderDash: [],
-    borderDashOffset: 0.0,
-    borderJoinStyle: 'miter',
-    pointBorderColor: "rgba(75,192,192,1)",
-    pointBackgroundColor: "#fff",
-    pointBorderWidth: 1,
-    pointHoverRadius: 5,
-    pointHoverBackgroundColor: "rgba(75,192,192,1)",
-    pointHoverBorderColor: "rgba(220,220,220,1)",
-    pointHoverBorderWidth: 2,
-    pointRadius: 3,
-    pointHitRadius: 10,
-    data: {{ graphData }},
-    }
-]
-};
-
-	
-   var contextGraph = document.getElementById('summonerGraph').getContext('2d');
-   var lineGraph = new Chart(contextGraph, {
-	type: 'line',
-	data: data,
-	});
-</script>
-</div>
 <div class="row" id="champion info" >
     <div class="row">
         <p class="lead" id="cover-info">Enter champion name</p>
@@ -121,6 +77,52 @@ datasets: [
             </table><bg-helper></bg-helper>
         </div>
     </div>
+<h2 class="cover-heading">Estimated Daily Champion Mastery Point Gain</h2>
+<div class='transbox' style='opacity:.90'>
+<style>
+	div.transbox{
+		background-color: #ffffff
+	}
+</style>
+
+<canvas id="summonerGraph" width="300" height="150"></canvas>
+<script>
+
+var data = {
+labels: {{ graphLabels|safe }},
+datasets: [
+    {
+    label: "Estimated Champion Points Gained by Day (Recent 10 Matches)",
+    fill: false,
+    lineTension: 0.1,
+    backgroundColor: "rgba(75,192,192,1)",
+    borderColor: "rgba(75,192,192,1)",
+    borderCapStyle: 'butt',
+    borderDash: [],
+    borderDashOffset: 0.0,
+    borderJoinStyle: 'miter',
+    pointBorderColor: "rgba(75,192,192,1)",
+    pointBackgroundColor: "#fff",
+    pointBorderWidth: 1,
+    pointHoverRadius: 5,
+    pointHoverBackgroundColor: "rgba(75,192,192,1)",
+    pointHoverBorderColor: "rgba(220,220,220,1)",
+    pointHoverBorderWidth: 2,
+    pointRadius: 3,
+    pointHitRadius: 10,
+    data: {{ graphData }},
+    }
+]
+};
+
+	
+   var contextGraph = document.getElementById('summonerGraph').getContext('2d');
+   var lineGraph = new Chart(contextGraph, {
+	type: 'line',
+	data: data,
+	});
+</script>
+</div>
 </div>
 {% endblock %}
 
