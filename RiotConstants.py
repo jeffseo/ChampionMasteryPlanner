@@ -1,7 +1,7 @@
 import os
 if os.environ.get('RIOT_API_KEY'):
     API_KEY = os.environ['RIOT_API_KEY']
-elif os.path.isfile("RIOT_API_KEY"):
+elif os.path.isfile("RIOT_API_KEY") and os.path.getsize("RIOT_API_KEY") > 0:
         with open("RIOT_API_KEY", 'r') as key:
             API_KEY = key.readline()
 else:
