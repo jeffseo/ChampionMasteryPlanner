@@ -1,1 +1,1 @@
-web: python manage.py collectstatic --noinput; gunicorn lolserver.wsgi --workers=5 --bind=0.0.0.0:$PORT
+web: gunicorn lolserver.wsgi --workers=5 --bind=0.0.0.0:$PORT
