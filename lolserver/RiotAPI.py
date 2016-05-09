@@ -2,7 +2,6 @@ import requests
 import json
 import RiotConstants as Consts
 import imp
-import time
 masteryPointFormula = imp.load_source("masteryPointFormula", "lolserver/api/masteryPointFormula.py")
 
 class ChampionInfo(object):
