@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
 from lolserver import api
 
 urlpatterns = [
@@ -23,4 +24,5 @@ urlpatterns = [
     url(r'^summoner/', api.views.summoner),
     url(r'^info/', api.views.info),
     url(r'^admin/', admin.site.urls),
+    url(r'^static/(?P<path>.*)$','django.views.static.serve', {'document_root': settings.STATIC_ROOT})
 ]
