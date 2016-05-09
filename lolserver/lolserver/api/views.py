@@ -24,20 +24,6 @@ def summoner(request):
         api = RiotAPI(RiotConstants.API_KEY, region)
         # Catches TypeError when user enters invalid summoner name.
         try:
-            #summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
-            #championList = api.getChampionMasteryList(summonerId,10)
-            #context['summonerName'] = summonerName
-            #context['region'] = region
-            #context['championList'] = championList
-            
-            ## creating a list of champions for dropdown in champion search bar.
-            #championListOrdered = []
-    
-            #for k,v in api.getChampionListByName().items():
-                #championListOrdered.append(v['name'])
-            #championListOrdered.sort()
-            #context['orderedChampionList'] = championListOrdered
-            #return render(request,'templates/summoner.html', context)
             context['summonerName'] = summonerName
             context['region'] = region
             summonerName = summonerName.replace(' ','')
@@ -52,7 +38,13 @@ def summoner(request):
                 championListOrdered.append([v['name'],v['key']])
             championListOrdered.sort()
             context['orderedChampionList'] = championListOrdered
-            return render(request,'templates/summoner.html', context)            
+            # recentMatchesData returns a list with two elements. The first is a 
+            # list of the labels for the graphs (days) and the second is a list
+            # of champion point values corresponding to the day labels.
+            recentMatchesData = api.getRecentMatches(summonerId)
+            context['graphLabels'] = recentMatchesData[0]
+            context['graphData'] = recentMatchesData[1]
+            return render(request,'templates/summoner.html', context)          
         except TypeError:
             print("TypeError")
             context['errorFlag'] = "true"
@@ -79,11 +71,6 @@ def champion(request):
         context['championMasteryFor5'] = RiotConstants.MASTERY_POINTS[5]
         context['championName'] = championName
         context['region'] = region
-
-        #context['champion'] = api.getChampionMastery(summonerId, api.getChampionId(championName))
-        #context['gamesNeeded'] = masteryPointFormula.pointsRequired(api.getChampionMastery(summonerId, api.getChampionId(championName)).championPoints, 21600, 0.5)
-        
-
         context['champion'] = api.getChampionMastery(summonerId, championId)
         context['championImage'] = api.getChampionBackgroundImage(championKey)
 
@@ -93,7 +80,7 @@ def champion(request):
             championListOrdered.append([v['name'],v['key']])
         championListOrdered.sort()
         context['orderedChampionList'] = championListOrdered
-        api.getRecentMatches(summonerId)
+        
         return render(request,'templates/champion.html', context)    
 
 def info(request):

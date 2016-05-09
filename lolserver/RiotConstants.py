@@ -39,6 +39,12 @@ API_VERSIONS = {
     'game': '1.3'
 }
 
+# Used to filter out only game modes that award champion mastery points
+# (i.e. no ARAM, no Bot games, etc).
+VALID_GAME_MODES = ['NORMAL', 'RANKED_SOLO_5x5', 'RANKED_PREMADE_5x5',
+                    'RANKED_TEAM_5x5', 'CAP_5x5', 'ONEFORALL_5x5', 'SR_6x6', 
+                    'URF', 'ASCENSION', 'HEXAKILL', 'KING_PORO']
+
 #https://developer.riotgames.com/docs/regional-endpoints
 ENDPOINTS = {
     'BR' : {
