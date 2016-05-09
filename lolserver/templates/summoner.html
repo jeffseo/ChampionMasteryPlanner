@@ -1,5 +1,10 @@
 {% extends "templates/base.html" %}
 
+{% block active_tab %}
+<li class="active"><a href="/">Home</a></li>
+<li><a href="/info">Info</a></li>
+{% endblock %}
+
 {% block content %}
 <h1 class="cover-heading">Summoner: {{ summonerName }}</h1>
 <div class="row" id="champion info" >

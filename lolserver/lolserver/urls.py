@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^$', include('lolserver.api.urls')),
     url(r'^summoner/champion', api.views.champion),
     url(r'^summoner/', api.views.summoner),
+    url(r'^info/', api.views.info),
     url(r'^admin/', admin.site.urls),
 ]

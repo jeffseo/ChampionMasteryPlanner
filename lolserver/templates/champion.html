@@ -1,5 +1,10 @@
 {% extends "templates/base.html" %}
 
+{% block active_tab %}
+<li class="active"><a href="/">Home</a></li>
+<li><a href="/info">Info</a></li>
+{% endblock %}
+
 {% block content %}
 <h1 class="cover-heading">Summoner: <b>{{ summonerName }}</b></h1>
 <div class="row" id="champion info" >
@@ -96,13 +101,21 @@
     </div>
 
     <div class="row">
-        <form action="javascript:showEstimation()" role="form-horizontal">
+        <form action="javascript:showEstimation()" role="form-inline">
             <div class="form-group">
-                <label for="pointsDesired" class="col-md-6 col-md-offset-1 control-label">Enter Number of Champion Points Desired:</label>
-                <input style='width:150px; height:25px' id="pointsDesired" type="number" placeholder="1000000" class="col-md-3 col-md-pull-1 form-control" required value=""/>
-                <button type="submit" class="btn btn-primary">Estimate!</button>
+                <div class="col-md-9">
+                    <label for="pointsDesired" class="col-md-6 col-md-offset-2 control-label">Enter Number of Champion Points Desired:</label>
+                    <div class="col-md-3">
+                        <input style='width:100%;height:25px' id="pointsDesired" type="number" placeholder="1000000" class="col-md-3 col-md-pull-1 form-control" required value=""/>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary">Estimate!</button>
+                </div> 
             </div>
         </form>
+    </div>
+    <div class="row">
         <div class="transbox">
             <h4 id="estimation-default" style="display:block">
             Please enter number of points and click the "Estimate!" button to <i>estimate</i> :)

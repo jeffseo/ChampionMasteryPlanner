@@ -66,3 +66,5 @@ def champion(request):
         context['orderedChampionList'] = championListOrdered
         return render(request,'templates/champion.html', context)    
 
+def info(request):
+    return render(request, 'templates/info.html')
