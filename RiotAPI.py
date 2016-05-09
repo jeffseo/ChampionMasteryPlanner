@@ -123,11 +123,11 @@ class RiotAPI(object):
 
     def getChampionImageSource(self, championKey):
         version = self.getLatestLeagueVersion()
-        return 'http://ddragon.leagueoflegends.com/cdn/{version}/img/champion/{championKey}.png'.format(version=version,
+        return 'https://ddragon.leagueoflegends.com/cdn/{version}/img/champion/{championKey}.png'.format(version=version,
                                                                                                         championKey=championKey)
 
     def getChampionBackgroundImage(self, championKey):
-        return 'http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{championKey}_0.jpg'.format(championKey=championKey)
+        return 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/{championKey}_0.jpg'.format(championKey=championKey)
 
     def getLatestLeagueVersion(self):
         api_url = Consts.URL['league_version'].format(region=self.region.lower(),version =Consts.API_VERSIONS['static-data'])
