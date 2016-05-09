@@ -9,8 +9,8 @@
 <h1 class="cover-heading">Summoner: {{ summonerName }}</h1>
 <div class="row" id="champion info" >
     <div class="row">
-        <p class="lead" id="cover-info">Enter champion name</p>
-        <div class="col-md-6 col-md-offset-3">
+        <p class="lead" id="cover-info">Select Champion name below</p>
+        <div class="col-md-6 col-md-offset-3" align="center">
             <form action="champion" method="get" id="champion-form">
                 <div class="input-group">
 					   <script type="text/javascript">
@@ -30,6 +30,10 @@
 						
 						.select2-results__options {
 							color: #333
+						}
+						
+						.select2-container--classic .select2-selection--single .select2-selection__placeholder {
+							color: #333;
 						}
 						</style>
 						<select class="js-basic-single" name="championName" onchange="this.form.submit();">
