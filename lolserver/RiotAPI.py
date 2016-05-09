@@ -6,22 +6,25 @@ masteryPointFormula = imp.load_source("masteryPointFormula", "lolserver/api/mast
 
 class ChampionInfo(object):
     def __init__(self):
-        self.championName = None;
-        self.championLevel = None;
-        self.championPoints = None;
-        self.pointsUntilNextLevel = None;
-        self.pointsSinceLastLevel = None;
-        self.championIcon = None;
-        self.gamesNeeded = None;
+        self.championName = None
+        self.championLevel = None
+        self.championPoints = None
+        self.pointsUntilNextLevel = None
+        self.pointsSinceLastLevel = None
+        self.championIcon = None
+        self.gamesNeededForNextLevel = None
+        self.gamesNeededForLevel5 = None
+        self.championTitle = None
+        self.chestGranted = False
+        self.highestRank = "N/A"
 
     def setUnplayedInfo(self, championName):
         self.championName = championName
         self.championLevel = 1
         self.championPoints = 0
-        self.pointsUntilNextLevel = 1800
-        self.championIcon = None
-        self.gamesNeeded = 30
-
+        self.pointsUntilNextLevel = Consts.MASTERY_POINTS[2]
+        self.gamesNeededForNextLevel = masteryPointFormula.gamesRequired(0, Consts.MASTERY_POINTS[2], 0.5)
+        self.gamesNeededForLevel5 = masteryPointFormula.gamesRequired(0, Consts.MASTERY_POINTS[5], 0.5)
 
 class RiotAPI(object):
 
@@ -69,9 +72,12 @@ class RiotAPI(object):
             currentChampionInfo.championPoints = champion['championPoints'];
             currentChampionInfo.pointsUntilNextLevel = champion['championPointsUntilNextLevel'];
             currentChampionInfo.pointsSinceLastLevel = champion['championPointsSinceLastLevel'];
+            currentChampionInfo.championKey = self.getChampionKey(champion['championId'])
             currentChampionInfo.championIcon = self.getChampionImageSource(self.getChampionKey(champion['championId']))
+            currentChampionInfo.chestGranted = champion['chestGranted']
             # Assuming 50% win rate.
-            currentChampionInfo.gamesNeeded = masteryPointFormula.pointsRequired(float(champion['championPoints']), 21600, 0.5)
+            currentChampionInfo.gamesNeededForNextLevel = masteryPointFormula.gamesRequired(float(champion['championPoints']), float(champion['championPoints'])+float(champion['championPointsUntilNextLevel']), 0.5)
+            currentChampionInfo.gamesNeededForLevel5 = masteryPointFormula.gamesRequired(float(champion['championPoints']), Consts.MASTERY_POINTS[5], 0.5)
             championMasteryList.append(currentChampionInfo)
         return championMasteryList
 
@@ -86,15 +92,18 @@ class RiotAPI(object):
 #    "lastPlayTime": 1462081320000
 # }
     def getChampionMastery(self, playerId, championId):
+        api_url_all = Consts.URL['all_champion_mastery'].format(platformId=Consts.ENDPOINTS[self.region]['platform'],
+                                                                playerId=playerId)
         api_url = Consts.URL['single_champion_mastery'].format( platformId=Consts.ENDPOINTS[self.region]['platform'],
                                                                 playerId=playerId,
                                                                 championId=championId)
+        championAllJson = self._request(api_url_all)
         championJson = self._request(api_url)
-        
         champion = ChampionInfo()
         if not championJson:
             champion.setUnplayedInfo(self.getChampionNameById(championId))
             champion.championIcon = self.getChampionImageSource(self.getChampionKey(championId))
+            champion.championTitle = self.getChampionTitleById(championId) 
             return champion
         champion.championName = self.getChampionNameById(championId)
         champion.championLevel = championJson['championLevel'] 
@@ -102,8 +111,17 @@ class RiotAPI(object):
         champion.pointsUntilNextLevel = championJson['championPointsUntilNextLevel'];
         champion.pointsSinceLastLevel = championJson['championPointsSinceLastLevel'];
         championKey = self.getChampionKey(championJson['championId'])
-        champion.championIcon = self.getChampionImageSource(championKey)
-        champion.gamesNeeded = masteryPointFormula.pointsRequired(float(champion.championPoints), 21600, 0.5)
+        champion.championIcon = self.getChampionImageSource(championKey)       
+        champion.championTitle = self.getChampionTitleById(championId) 
+        champion.gamesNeededForNextLevel = masteryPointFormula.gamesRequired(float(championJson['championPoints']), float(championJson['championPoints'])+float(championJson['championPointsUntilNextLevel']), 0.5)
+        champion.gamesNeededForLevel5 = masteryPointFormula.gamesRequired(float(championJson['championPoints']), Consts.MASTERY_POINTS[5], 0.5)
+        #for some reason, getting single champ mastery info always returns chestGranted = false
+        for championMastery in championAllJson:
+            if championMastery['championId'] == championId:
+                if 'highestGrade' in championMastery:
+                    champion.highestRank = championMastery['highestGrade']
+                champion.chestGranted = championMastery['chestGranted']
+                break
         return champion
 
     #local for now
@@ -154,7 +172,12 @@ class RiotAPI(object):
         else:
             for k,v in self.staticChampionListByName.items():
                 if v['name'] == championName:
-                    return v['id'] 
+                    return v['id']
+
+    def getChampionNameByKey(self,championKey):
+        for k,v in self.staticChampionListByName.items():
+            if v['key'] == championKey:
+                return v['name']       
 
     def getChampionNameById(self,championId, local=False):
         if local: 
@@ -163,13 +186,6 @@ class RiotAPI(object):
                 return data[str(championId)]['name']
         else:
             return self.staticChampionList[str(championId)]['name']
-            # api_url = Consts.URL['champion_by_id'].format(region=self.region.lower(),
-            #                                             version=Consts.API_VERSIONS['static-data'],
-            #                                             id=championId)
-            # championJson = self._request(api_url, isGlobal=True)
-            # return championJson['name']
-
-#    'champion_list_by_id': "api/lol/static-data/{region}/v{version}/champion?dataById=true",
 
     def getChampionListById(self):
         api_url = Consts.URL['champion_list_by_id'].format(region=self.region.lower(),
@@ -183,6 +199,8 @@ class RiotAPI(object):
         championsJson = self._request(api_url, isGlobal=True)
         return championsJson['data']
 
+    def getChampionTitleById(self,championId):
+        return self.staticChampionList[str(championId)]['title']
 
 
 

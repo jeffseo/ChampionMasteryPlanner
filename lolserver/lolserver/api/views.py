@@ -24,51 +24,76 @@ def summoner(request):
         api = RiotAPI(RiotConstants.API_KEY, region)
         # Catches TypeError when user enters invalid summoner name.
         try:
-            summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
-            championList = api.getChampionMasteryList(summonerId,10)
+            #summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
+            #championList = api.getChampionMasteryList(summonerId,10)
+            #context['summonerName'] = summonerName
+            #context['region'] = region
+            #context['championList'] = championList
+            
+            ## creating a list of champions for dropdown in champion search bar.
+            #championListOrdered = []
+    
+            #for k,v in api.getChampionListByName().items():
+                #championListOrdered.append(v['name'])
+            #championListOrdered.sort()
+            #context['orderedChampionList'] = championListOrdered
+            #return render(request,'templates/summoner.html', context)
             context['summonerName'] = summonerName
             context['region'] = region
+            summonerName = summonerName.replace(' ','')
+            summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
+            championList = api.getChampionMasteryList(summonerId,10)
+    
             context['championList'] = championList
-            
             # creating a list of champions for dropdown in champion search bar.
             championListOrdered = []
     
             for k,v in api.getChampionListByName().items():
-                championListOrdered.append(v['name'])
+                championListOrdered.append([v['name'],v['key']])
             championListOrdered.sort()
             context['orderedChampionList'] = championListOrdered
-            return render(request,'templates/summoner.html', context)
+            return render(request,'templates/summoner.html', context)            
         except TypeError:
             print("TypeError")
             context['errorFlag'] = "true"
             context['summonerName'] = summonerName
             return render(request, 'templates/main.html', context)        
 
-
 def champion(request):
     context = {}
-    championName = request.GET.get('championName', None)
+    championKey = request.GET.get('championName', None)
     summonerName = request.GET.get('summonerName', None)
     region = request.GET.get('region', None)
-    if not summonerName or not region or not championName:
+    if not summonerName or not region or not championKey:
         #TODO: ADD ERROR PAGE(?)
         print 'error'
         return render(request, 'error')
     else:
         
         api = RiotAPI(RiotConstants.API_KEY, region)
-        summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
-        context['championName'] = championName
+        championName = api.getChampionNameByKey(championKey)
         context['summonerName'] = summonerName
+        summonerName = summonerName.replace(' ','')
+        summonerId = api.getSummonerByName(summonerName)[summonerName.lower()]['id']
+        championId = api.getChampionId(championName)
+        context['championMasteryFor5'] = RiotConstants.MASTERY_POINTS[5]
+        context['championName'] = championName
         context['region'] = region
-        context['champion'] = api.getChampionMastery(summonerId, api.getChampionId(championName))
-        context['gamesNeeded'] = masteryPointFormula.pointsRequired(api.getChampionMastery(summonerId, api.getChampionId(championName)).championPoints, 21600, 0.5)
+
+        #context['champion'] = api.getChampionMastery(summonerId, api.getChampionId(championName))
+        #context['gamesNeeded'] = masteryPointFormula.pointsRequired(api.getChampionMastery(summonerId, api.getChampionId(championName)).championPoints, 21600, 0.5)
         
+
+        context['champion'] = api.getChampionMastery(summonerId, championId)
+        context['championImage'] = api.getChampionBackgroundImage(championKey)
+
         # creating a list of champions for dropdown in champion search bar.
         championListOrdered = []
         for k,v in api.getChampionListByName().items():
-            championListOrdered.append(v['name'])
+            championListOrdered.append([v['name'],v['key']])
         championListOrdered.sort()
         context['orderedChampionList'] = championListOrdered
         return render(request,'templates/champion.html', context)    
 
+def info(request):
+    return render(request, 'templates/info.html')

@@ -26,14 +26,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <!-- Javscript functions -->
     <script src="{% static 'js/helper.js' %}"></script>
-	
+	  <link href="{% static 'css/helper.css' %}" rel="stylesheet" />
 	<!-- Champion Search Bar suggestion -->
-	<link href="../static/css/select2.min.css" rel="stylesheet" />
-	<script src="../static/js/select2.min.js"></script>
+	<link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
+	<script src="{% static 'js/select2.min.js' %}"></script>
 	
 	<!-- Slider for inputting Winrate -->
-	<link href="../static/css/bootstrap-slider.css" rel="stylesheet" />
-	<script src="../static/js/bootstrap-slider.min.js"></script>
+	<link href="{% static 'css/bootstrap-slider.css' %}" rel="stylesheet" />
+	<script src="{% static 'js/bootstrap-slider.min.js' %}"></script>
 </head>
 
 <body>
@@ -49,9 +49,9 @@
               <h3 class="masthead-brand"><a href="/">Champion Mastery Planner</a></h3>
               <nav>
                 <ul class="nav masthead-nav">
-                  <li class="active"><a href="/">Home</a></li>
-                  <li><a href="#">Teemo</a></li>
-                  <li><a href="#">Teemo</a></li>
+                  {% block active_tab %}
+                  {% endblock %}
+                  <li><a href="https://github.com/jfseo/ChampionMasteryPlanner">Github</a></li>
                 </ul>
               </nav>
             </div>

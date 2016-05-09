@@ -1,0 +1,22 @@
+{% extends "templates/base.html" %}
+
+{% block active_tab %}
+<li><a href="/">Home</a></li>
+<li class="active"><a href="/info">Info</a></li>
+
+{% endblock %}
+
+{% block content %}
+<div class='transbox' style='opacity:.90;text-align: left'>
+    <h1><b>&nbspInformation</b></h1>
+    <p style="color:white">
+    Champion mastery planner is designed to assist summoners in planning out how many games are needed to achieve a given rank or mastery points.
+    </p>
+
+    <h1><b>&nbspAbout Us</b></h1>
+    <p style="color:white">
+    This is a submission for the Riot Games API Challenge 2016 and was developed by two aspiring developers (and casual players) going by the summoner name of <u>Albert</u> and <u>Seo</u> in the NA Server.
+    </p>
+
+</div>
+{% endblock %}

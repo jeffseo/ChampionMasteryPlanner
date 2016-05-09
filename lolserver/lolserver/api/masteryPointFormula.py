@@ -1,6 +1,6 @@
 import math
 
-def pointsRequired(currentPoints, desiredPoints, winRate):
+def gamesRequired(currentPoints, desiredPoints, winRate):
     """ 
     Assume each game is 35 minutes long. 
     Given the user's current champion mastery points (currentPoints),
@@ -21,5 +21,3 @@ def pointsRequired(currentPoints, desiredPoints, winRate):
     else:
         avgPointPerGame = winRate * pointsForWin + (1 - winRate) * pointsForLoss
         return int(math.ceil(neededPoints / avgPointPerGame))
-    
-    
