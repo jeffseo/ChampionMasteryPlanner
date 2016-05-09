@@ -82,11 +82,6 @@ def champion(request):
             championListOrdered.append([v['name'],v['key']])
         championListOrdered.sort()
         context['orderedChampionList'] = championListOrdered
-        # champion graph created below
-        recentMatchesData = api.getRecentMatches(summonerId)
-        recentMatchesDataParsed = graphParser.parseChampData(recentMatchesData, championId)
-        context['graphLabels'] = recentMatchesDataParsed[0]
-        context['graphData'] = recentMatchesDataParsed[1]
         return render(request,'templates/champion.html', context)    
 
 def info(request):

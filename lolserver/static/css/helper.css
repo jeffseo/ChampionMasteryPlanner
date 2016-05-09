@@ -6,14 +6,6 @@ div.transbox {
   filter: alpha(opacity=60); /* For IE8 and earlier */
 }
 
-div.transbox2 {
-  margin: 10px;
-  background-color: #ffffff;
-  border: 1px solid black;
-  opacity: .90;
-  filter: alpha(opacity=60); /* For IE8 and earlier */
-}
-
 div.transbox p {
   margin: 5%;
   font-weight: bold;
