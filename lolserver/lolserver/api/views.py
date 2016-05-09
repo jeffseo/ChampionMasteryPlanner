@@ -5,9 +5,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 import RiotConstants
 from RiotAPI import RiotAPI
-import graphParser
 import masteryPointFormula
-
+import graphParser
 # Create your views here.
 
 def index(request):
