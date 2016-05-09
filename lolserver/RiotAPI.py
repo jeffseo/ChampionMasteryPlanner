@@ -15,7 +15,7 @@ class ChampionInfo(object):
         self.gamesNeededForNextLevel = None
         self.gamesNeededForLevel5 = None
         self.championTitle = None
-        self.chestGranted = False
+        self.chestAvailability = False
         self.highestRank = "N/A"
 
     def setUnplayedInfo(self, championName):
@@ -74,7 +74,7 @@ class RiotAPI(object):
             currentChampionInfo.pointsSinceLastLevel = champion['championPointsSinceLastLevel'];
             currentChampionInfo.championKey = self.getChampionKey(champion['championId'])
             currentChampionInfo.championIcon = self.getChampionImageSource(self.getChampionKey(champion['championId']))
-            currentChampionInfo.chestGranted = champion['chestGranted']
+            currentChampionInfo.chestAvailability = not champion['chestGranted']
             # Assuming 50% win rate.
             currentChampionInfo.gamesNeededForNextLevel = masteryPointFormula.gamesRequired(float(champion['championPoints']), float(champion['championPoints'])+float(champion['championPointsUntilNextLevel']), 0.5)
             currentChampionInfo.gamesNeededForLevel5 = masteryPointFormula.gamesRequired(float(champion['championPoints']), Consts.MASTERY_POINTS[5], 0.5)
@@ -120,7 +120,7 @@ class RiotAPI(object):
             if championMastery['championId'] == championId:
                 if 'highestGrade' in championMastery:
                     champion.highestRank = championMastery['highestGrade']
-                champion.chestGranted = championMastery['chestGranted']
+                champion.chestAvailability = not championMastery['chestGranted']
                 break
         return champion
 
