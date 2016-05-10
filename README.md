@@ -1,7 +1,7 @@
 # ChampionMasteryPlanner
 A tool for League of Legends users to plan out how many games are needed to obtain the champion mastery they desire
 
-**How to run the development site**  
+**How to run the development site (Chrome preferred)**  
 
 1. Clone this repo: ```git clone https://github.com/jfseo/ChampionMasteryPlanner.git```
 2. Install python (2.7.11)
@@ -17,7 +17,8 @@ A tool for League of Legends users to plan out how many games are needed to obta
 * Django==1.9.6
 * requests==2.9.1
 
-**Our webapp is hosted on heroku: https://lolcmp.herokuapp.com/**
+**Our webapp is hosted on heroku: https://lolcmp.herokuapp.com/**  
+Please be understanding of Heroku, it can be slow sometimes.
 
 **Please see the [Wiki](https://github.com/jfseo/ChampionMasteryPlanner/wiki/Documentation) on this GitHub repository for documentation.**
 
