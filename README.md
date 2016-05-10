@@ -13,7 +13,7 @@ A tool for League of Legends users to plan out how many games are needed to obta
 6. If no errors, open up a browser (chrome preferred) and navigate to: http://127.0.0.1:8000/
 
 
-**Python modules** (TODO: probably make a pip freeze)
+**Python modules**
 * Django==1.9.6
 * requests==2.9.1
 
