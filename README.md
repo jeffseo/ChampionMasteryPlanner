@@ -18,7 +18,7 @@ A tool for League of Legends users to plan out how many games are needed to obta
 * requests==2.9.1
 
 **Our webapp is hosted on heroku: https://lolcmp.herokuapp.com/**  
-Please be understanding of Heroku, it can be slow sometimes.
+Please be patient with Heroku, it can be slow sometimes.
 
 **Please see the [Wiki](https://github.com/jfseo/ChampionMasteryPlanner/wiki/Documentation) on this GitHub repository for documentation.**
 
