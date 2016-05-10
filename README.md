@@ -14,3 +14,4 @@ A tool for League of Legends users to plan out how many games are needed to obta
 * requests==2.9.1
 
 **Our webapp is hosted on heroku: https://lolcmp.herokuapp.com/**
+**Please see the Wiki on this GitHub repository for documentation.**
