@@ -4,13 +4,14 @@ A tool for League of Legends users to plan out how many games are needed to obta
 **How to run the development site**  
 
 ## Installation
-1. Install python (2.7.11)
-2. Install the python modules:
+1. Clone this repo: ```git clone https://github.com/jfseo/ChampionMasteryPlanner.git```
+2. Install python (2.7.11)
+3. Install the python modules:
   * Django (1.9.6)
   * requests (2.9.1)
-3. Copy & paste your Riot API key into the RIOT_API_KEY file
-4. Through command prompt, run: ```python manage.py runserver```
-5. If no errors, open up a browser (chrome preferred) and navigate to: http://127.0.0.1:8000/
+4. Copy & paste your Riot API key into the RIOT_API_KEY file
+5. Through command prompt, run: ```python manage.py runserver```
+6. If no errors, open up a browser (chrome preferred) and navigate to: http://127.0.0.1:8000/
 
 
 **Python modules** (TODO: probably make a pip freeze)
