@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<h1 class="cover-heading">Summoner: <b>{{ summonerName }}</b></h1>
+<h1 class="cover-heading">Summoner: <b><u>{{ summonerName }}</u></b></h1>
 <div class="row" id="champion info" >
     <div class="row">
         <p class="lead" id="cover-info">Select Champion below</p>
@@ -59,7 +59,7 @@
     </div>
 
     <div class="row">
-        <h2 class="cover-heading">Champion Mastery: <b>{{ champion.championName }}</b></h2>
+        <h2 class="cover-heading">Champion Mastery: <b><u>{{ champion.championName }}</u></b></h2>
         <div class="col-md-6">
             <img src="{{ championImage }}" alot="champion image" width='400px' height='325px' class = "avatar">
             <h4><span class="label label-primary">{{ championName }}: {{ champion.championTitle }}</span></h4>
