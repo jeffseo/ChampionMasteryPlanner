@@ -20,7 +20,7 @@ def summoner(request):
     if not summonerName or not region:
         #TODO: ADD ERROR PAGE(?)
         print 'error'
-        return render(request, 'error')
+        return render(request, 'templates/main.html')  
     else:
         api = RiotAPI(RiotConstants.API_KEY, region)
         # Catches TypeError when user enters invalid summoner name.
@@ -61,7 +61,7 @@ def champion(request):
     if not summonerName or not region or not championKey:
         #TODO: ADD ERROR PAGE(?)
         print 'error'
-        return render(request, 'error')
+        return render(request, 'templates/main.html') 
     else:
         
         api = RiotAPI(RiotConstants.API_KEY, region)
