@@ -2,6 +2,7 @@
 A tool for League of Legends users to plan out how many games are needed to obtain the champion mastery they desire
 
 **How to run the development site**  
+
 1. Clone this repo: ```git clone https://github.com/jfseo/ChampionMasteryPlanner.git```
 2. Install python (2.7.11)
 3. Install the python modules:
