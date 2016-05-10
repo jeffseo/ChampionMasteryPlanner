@@ -3,10 +3,14 @@ A tool for League of Legends users to plan out how many games are needed to obta
 
 **How to run the development site**  
 
-1. install python (2.7.11)  
-2. install python modules listed below
-3. through command prompt > run "python manage.py runserver" 
-5. browse web to the local address. (http://127.0.0.1:8000/)  
+## Installation
+1. Install python (2.7.11)
+2. Install the python modules:
+  * Django (1.9.6)
+  * requests (2.9.1)
+3. Copy & paste your Riot API key into the RIOT_API_KEY file
+4. Through command prompt, run: ```python manage.py runserver```
+5. If no errors, open up a browser (chrome preferred) and navigate to: http://127.0.0.1:8000/
 
 
 **Python modules** (TODO: probably make a pip freeze)
